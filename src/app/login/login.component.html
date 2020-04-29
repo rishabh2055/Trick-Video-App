@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row valign-wrapper">
+    <div class="col m6 s10 offset-m3 offset-s1 top-5">
+      <div class="card darken-1">
+        <div class="card-content">
+          <span class="card-title center-align">Please, login into your account</span>
+          <form>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="mobile_no" type="text" class="validate">
+                <label for="mobile_no">Mobile No</label>
+              </div>
+
+              <div class="input-field col s12">
+                <input id="password" type="password" class="validate">
+                <label for="password">First Name</label>
+              </div>
+
+              <label style='float: right;'>
+								<a class='pink-text' href='#!'><b>Forgot Password?</b></a>
+							</label>
+
+              <div class="input-field col s6 offset-s4">
+                <a class="waves-effect waves-light btn">Login</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="s12 center-align">
+    <p>Don't have an account? <a [routerLink]="'/signup'">Signup</a></p>
+  </div>
+</div>

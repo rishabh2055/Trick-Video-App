@@ -1,0 +1,25 @@
+
+
+<header>
+  <div class="navbar-fixed">
+    <nav class="nav-wrapper teal darken-3 top-nav">
+      <div class="container">
+        <a [routerLink] = "'/'" class="brand-logo">Video App</a>
+        <a href="#" materialize="sideNav" [materializeParams]="[options]" class="sidenav-trigger hide-on-med-and-up" data-activates="mobile-sidenav">
+          <i class="material-icons">menu</i>
+        </a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li routerLinkActive="active"><a [routerLink] = "'/login'">Login</a></li>
+          <li routerLinkActive="active"><a [routerLink] = "'/signup'">Signup</a></li>
+          <li><a [routerLink] = "'/'">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <ul class="side-nav" id="mobile-sidenav">
+      <li routerLinkActive="active"><a [routerLink] = "'/login'">Login</a></li>
+      <li routerLinkActive="active"><a [routerLink] = "'/signup'">Signup</a></li>
+      <li><a [routerLink] = "'/'">Logout</a></li>
+    </ul>
+  </div>
+</header>

@@ -1,0 +1,8 @@
+/**
+ * This file is used to tell babel how to transform our JavaScript files.
+ * We will be converting our Es6 code to Es5 code.
+ */
+
+ {
+  "presets": ["@babel/preset-env"]
+ }
