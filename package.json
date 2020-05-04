@@ -7,7 +7,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start": "nodemon --exec babel-node --inspect-brk server.js"
+    "start": "nodemon --exec babel-node --inspect-brk server.js",
+    "dev": "ng serve --proxy-config proxy.config.json"
   },
   "private": true,
   "dependencies": {

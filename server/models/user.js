@@ -2,7 +2,7 @@ import models from './index';
 import bcrypt from 'bcrypt-nodejs';
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
+  const User = sequelize.define('users', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -43,6 +43,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: '"Active"'
     },
+    isDoctor: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      field: '"IsDoctor"'
+    },
     invalidAttempt: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -53,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       field: '"FirstLogin'
     },
-    Hash: {
+    hash: {
       type: DataTypes.TEXT,
       allowNull: false,
       field: "Hash"
@@ -107,6 +112,14 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
+  };
+
+  User.associate = (models) => {
+    User.belongsTo(models.doctors, {
+      foreignKey: 'userId',
+      targetKey: 'id',
+      onDelete: 'CASCADE'
+    });
   };
   return User;
 };

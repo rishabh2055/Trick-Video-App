@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
 
-import app from '../../server';
 import user from './user';
 
 router.get('/', (req, res) => {

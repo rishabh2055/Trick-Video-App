@@ -100,3 +100,31 @@
   background-color: rgba(0, 0, 0, 0.42);
   border-color: #949494
 }
+input:not([type]), input[type=text]:not(.browser-default),
+input[type=password]:not(.browser-default), input[type=email]:not(.browser-default),
+input[type=url]:not(.browser-default), input[type=time]:not(.browser-default),
+input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default),
+input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default),
+input[type=number]:not(.browser-default), input[type=search]:not(.browser-default),
+textarea.materialize-textarea {
+  margin: 0 !important;
+}
+
+.input-field .helper-text, .radio-field .helper-text {
+  position: relative;
+  min-height: 18px;
+  display: block;
+  font-size: 12px;
+  color: #dc3545;
+}
+
+.has-error label, .has-error span {
+  color: #dc3545;
+}
+.input-field.has-error input {
+  border-bottom: 1px solid #dc3545;
+}
+
+.has-error [type="radio"]:not(:checked) + span:before, .has-error [type="radio"]:not(:checked) + span:after {
+  border: 2px solid #dc3545;
+}

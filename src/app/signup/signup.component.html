@@ -4,52 +4,107 @@
       <div class="card darken-1">
         <div class="card-content">
           <span class="card-title center-align">Register your account</span>
-          <form>
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <div class="row">
-              <div class="input-field col s6">
-                <input id="first_name" type="text" class="validate">
-                <label for="first_name">First Name</label>
+              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.firstName.errors }">
+                <input id="first_name" formControlName="firstName" type="text" class="validate">
+                <label for="first_name">First name</label>
+                <span *ngIf="submitted && f.firstName.errors" class="helper-text">
+                  <span *ngIf="f.firstName.errors.required">First name is required</span>
+                  <span *ngIf="f.firstName.errors.maxlength">First name must be maximum 100 characters</span>
+                  <span *ngIf="f.firstName.errors.minlength">First name must be at least 2 characters</span>
+                </span>
               </div>
 
-              <div class="input-field col s6">
-                <input id="last_name" type="text" class="validate">
-                <label for="last_name">Last Name</label>
+              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.lastName.errors }">
+                <input id="last_name" formControlName="lastName" type="text" class="validate">
+                <label for="last_name">Last name</label>
+                <span *ngIf="submitted && f.lastName.errors" class="helper-text">
+                  <span *ngIf="f.lastName.errors.required">Last name is required</span>
+                  <span *ngIf="f.lastName.errors.maxlength">Last name must be maximum 100 characters</span>
+                  <span *ngIf="f.lastName.errors.minlength">Last name must be at least 2 characters</span>
+                </span>
               </div>
 
-              <div class="input-field col s6">
-                <input id="email" type="text" class="validate">
+              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.email.errors }">
+                <input id="email" formControlName="email" type="text" class="validate">
                 <label for="email">Email</label>
+                <span *ngIf="submitted && f.email.errors" class="helper-text">
+                  <span *ngIf="f.email.errors.required">Email is required</span>
+                  <span *ngIf="f.email.errors.email">Email must be a valid email address</span>
+                  <span *ngIf="f.email.errors.maxlength">Email must be maximum 100 characters</span>
+                  <span *ngIf="f.email.errors.minlength">Email must be at least 2 characters</span>
+                </span>
               </div>
 
-              <div class="input-field col s6">
-                <input id="mobile_no" type="text" class="validate">
-                <label for="mobile_no">Mobile No</label>
+              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.mobileNo.errors }">
+                <input id="mobile_no" formControlName="mobileNo" type="text" class="validate">
+                <label for="mobile_no">Mobile no</label>
+                <span *ngIf="submitted && f.mobileNo.errors" class="helper-text">
+                  <span *ngIf="f.mobileNo.errors.required">Mobile no is required</span>
+                  <span *ngIf="f.mobileNo.errors.pattern">Mobile no must be a valid mobile no</span>
+                </span>
               </div>
 
-              <div class="input-field col s6">
-                <input id="password" type="password" class="validate">
+              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.password.errors }">
+                <input id="password" formControlName="password" type="password" class="validate">
                 <label for="password">Password</label>
+                <span *ngIf="submitted && f.password.errors" class="helper-text">
+                  <span *ngIf="f.password.errors.required">Password is required</span>
+                  <span *ngIf="f.password.errors.maxlength">Password must be maximum 100 characters</span>
+                  <span *ngIf="f.password.errors.minlength">Password must be at least 6 characters</span>
+                </span>
               </div>
 
-              <div class="input-field col s6">
-                <input id="confirm_password" type="password" class="validate">
-                <label for="confirm_password">Confirm Password</label>
+              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.confirmPassword.errors }">
+                <input id="confirm_password" formControlName="confirmPassword" type="password" class="validate">
+                <label for="confirm_password">Confirm password</label>
+                <span *ngIf="submitted && f.confirmPassword.errors" class="helper-text">
+                  <span *ngIf="f.confirmPassword.errors.required">Confirm password is required</span>
+                  <span *ngIf="f.confirmPassword.errors.mustMatch">Passwords must match</span>
+                </span>
               </div>
-
-              <div class="row center-align">
+            </div>
+            <div class="row">
+              <div class="center-align radio-field" [ngClass]="{ 'has-error': submitted && f.isDoctor.errors }">
                 <p class="center-align">Are you a doctor ?</p>
                 <label>
-                  <input class="with-gap" name="isDoctor" type="radio"  />
+                  <input class="with-gap" name="isDoctor" type="radio" value="Yes" formControlName="isDoctor" />
                   <span>Yes</span>
                 </label>
                 <label>
-                  <input class="with-gap" name="isDoctor" type="radio"  />
+                  <input class="with-gap" name="isDoctor" type="radio" value="No" formControlName="isDoctor" />
                   <span>No</span>
                 </label>
+                <span *ngIf="submitted && f.isDoctor.errors" class="helper-text">
+                  <span *ngIf="f.isDoctor.errors.required">Choose an option</span>
+                </span>
+              </div>
+
+              <div *ngIf="f.isDoctor.value === 'Yes'" class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.clinicName.errors }">
+                <input id="clinic_name" formControlName="clinicName" type="text" class="validate">
+                <label for="clinic_name">Clinic/Hospital name</label>
+                <span *ngIf="submitted && f.clinicName.errors" class="helper-text">
+                  <span *ngIf="f.clinicName.errors.required">Clinic/Hospital name is required</span>
+                  <span *ngIf="f.clinicName.errors.maxlength">Clinic/Hospital name must be maximum 100 characters</span>
+                  <span *ngIf="f.clinicName.errors.minlength">Clinic/Hospital name must be at least 2 characters</span>
+                </span>
+              </div>
+
+              <div *ngIf="f.isDoctor.value === 'Yes'" class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.registrationNo.errors }">
+                <input id="reg_no" formControlName="registrationNo" type="text" class="validate">
+                <label for="reg_no">Registration no</label>
+                <span *ngIf="submitted && f.registrationNo.errors" class="helper-text">
+                  <span *ngIf="f.registrationNo.errors.required">egistration no is required</span>
+                  <span *ngIf="f.registrationNo.errors.maxlength">egistration no must be maximum 100 characters</span>
+                  <span *ngIf="f.registrationNo.errors.minlength">egistration No must be at least 6 characters</span>
+                </span>
               </div>
 
               <div class="input-field col s12 center-align">
-                <a class="waves-effect waves-light btn">Register</a>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Register
+                  <i class="material-icons right">send</i>
+                </button>
               </div>
             </div>
           </form>
