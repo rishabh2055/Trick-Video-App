@@ -128,3 +128,12 @@ textarea.materialize-textarea {
 .has-error [type="radio"]:not(:checked) + span:before, .has-error [type="radio"]:not(:checked) + span:after {
   border: 2px solid #dc3545;
 }
+
+.icon_style{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+  color: white;
+  cursor:pointer;
+}

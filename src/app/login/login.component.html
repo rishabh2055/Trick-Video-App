@@ -1,27 +1,41 @@
 <div class="container">
   <div class="row valign-wrapper">
     <div class="col m6 s10 offset-m3 offset-s1 top-5">
+      <app-error-success-details
+        *ngIf="showSuccessErrorDetails && submitted"
+        [isSuccess] = "isSuccess"
+        [serverMessageInfo] = "serverMessageInfo"
+      ></app-error-success-details>
       <div class="card darken-1">
         <div class="card-content">
           <span class="card-title center-align">Please, login into your account</span>
-          <form>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="row">
-              <div class="input-field col s12">
-                <input id="mobile_no" type="text" class="validate">
+              <div class="input-field col s12" [ngClass]="{ 'has-error': submitted && f.mobileNo.errors }">
+                <input id="mobile_no" formControlName="mobileNo" type="text" class="validate">
                 <label for="mobile_no">Mobile No</label>
+                <span *ngIf="submitted && f.mobileNo.errors" class="helper-text">
+                  <span *ngIf="f.mobileNo.errors.required">Mobile no is required</span>
+                  <span *ngIf="f.mobileNo.errors.pattern">Mobile no must be a valid mobile no</span>
+                </span>
               </div>
 
-              <div class="input-field col s12">
-                <input id="password" type="password" class="validate">
-                <label for="password">First Name</label>
+              <div class="input-field col s12" [ngClass]="{ 'has-error': submitted && f.password.errors }">
+                <input id="password" formControlName="password" type="password" class="validate">
+                <label for="password">Password</label>
+                <span *ngIf="submitted && f.password.errors" class="helper-text">
+                  <span *ngIf="f.password.errors.required">Password is required</span>
+                </span>
               </div>
 
               <label style='float: right;'>
-								<a class='pink-text' href='#!'><b>Forgot Password?</b></a>
-							</label>
+                <a class='pink-text' href='#!'><b>Forgot Password?</b></a>
+              </label>
 
               <div class="input-field col s6 offset-s4">
-                <a class="waves-effect waves-light btn">Login</a>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Login
+                  <i class="material-icons right">send</i>
+                </button>
               </div>
             </div>
           </form>

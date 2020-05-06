@@ -1,6 +1,11 @@
 <div class="container">
   <div class="row valign-wrapper">
     <div class="col s10 offset-s1 top-5">
+      <app-error-success-details
+        *ngIf="showSuccessErrorDetails && submitted"
+        [isSuccess] = "isSuccess"
+        [serverMessageInfo] = "serverMessageInfo"
+      ></app-error-success-details>
       <div class="card darken-1">
         <div class="card-content">
           <span class="card-title center-align">Register your account</span>

@@ -49,5 +49,12 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: false
 
   });
+  Doctors.associate = (models) => {
+    Doctors.belongsTo(models.users, {
+      foreignKey: 'userId',
+      targetKey: 'id',
+      onDelete: 'CASCADE'
+    });
+  };
   return Doctors;
 };

@@ -13,6 +13,9 @@ import { UserService } from '../_utils/user.service';
 export class SignupComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
+  isSuccess = false;
+  showSuccessErrorDetails = false;
+  serverMessageInfo: object = {};
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService
@@ -43,7 +46,7 @@ export class SignupComponent implements OnInit {
     const registrationNo = this.registerForm.get('registrationNo');
     this.registerForm.get('isDoctor').valueChanges.subscribe(
       isDoc => {
-        if(isDoc === 'Yes'){
+        if (isDoc === 'Yes'){
           clinicName.setValidators([Validators.required, Validators.maxLength(100), Validators.minLength(2)]);
           registrationNo.setValidators([Validators.required, Validators.maxLength(100), Validators.minLength(6)]);
         }
@@ -51,7 +54,7 @@ export class SignupComponent implements OnInit {
     );
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted = true;
 
     // stop here if form is invalid
@@ -59,10 +62,15 @@ export class SignupComponent implements OnInit {
       return;
     }
     this.userService.registerNewUser(this.registerForm.value).subscribe(
-      (response) => {
-
+      (response: any) => {
+        this.showSuccessErrorDetails = true;
+        this.isSuccess = true;
+        response.message = 'Registered successfully. Go to login page.';
+        this.serverMessageInfo = response;
       }, (error) => {
-
+        this.showSuccessErrorDetails = true;
+        this.isSuccess = false;
+        this.serverMessageInfo = error.error;
       }
     );
   }

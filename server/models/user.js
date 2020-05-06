@@ -93,33 +93,5 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: false
 
   });
-
-  // define some required methods
-  User.prototype.hashPassword = ()  => {
-    return bcrypt.hashSync(this.password, bcrypt.genSaltSync(10), null);
-  };
-
-  User.prototype.comparePassword = function (passw, err, cb) {
-    if (err) {
-      return cb(err, false, false);
-
-    } else {
-        bcrypt.compare(passw, this.Hash, function (err, isMatch) {
-        if (err) {
-            return cb(err, false, false);
-        }
-        cb(null, isMatch, false);
-      });
-    }
-
-  };
-
-  User.associate = (models) => {
-    User.belongsTo(models.doctors, {
-      foreignKey: 'userId',
-      targetKey: 'id',
-      onDelete: 'CASCADE'
-    });
-  };
   return User;
 };
