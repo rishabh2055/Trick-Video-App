@@ -1,0 +1,68 @@
+<!-- Modal Structure -->
+<div id="appointmentModal" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <div class="row">
+      <div class="col s12">
+        <h4>Appointment Details</h4>
+        <form [formGroup]="apptForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="input-field col m6 s12">
+              <div class="row" (click)="stopPropagation($event)">
+                <div class="input-field col m6 s12">
+                  <input id="from_date" formControlName="fromDate" type="text"
+                  materialize="pickadate"
+                  [materializeActions]="fromDateActions"
+                  [materializeParams]="[{format: 'yyyy-mm-dd'}]">
+                  <label for="from_date" [ngClass]="f.fromDate.value !== ''? 'active': ''">From date</label>
+                  <span *ngIf="submitted && f.fromDate.errors" class="helper-text">
+                    <span *ngIf="f.fromDate.errors.required">From date is required</span>
+                  </span>
+                </div>
+                <div class="input-field col m6 s12">
+                  <input id="from_time" formControlName="fromTime" type="text"
+                  materialize="pickatime"
+                  [materializeActions]="fromTimeActions"
+                  [materializeParams]="[{twelvehour: false}]">
+                  <label for="from_time" [ngClass]="f.fromTime.value !== ''? 'active': ''">From Time</label>
+                  <span *ngIf="submitted && f.fromTime.errors" class="helper-text">
+                    <span *ngIf="f.fromTime.errors.required">From time is required</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="input-field col m6 s12">
+              <div class="row" (click)="stopPropagation($event)">
+                <div class="input-field col m6 s12">
+                  <input id="to_date" formControlName="toDate" type="text"
+                  materialize="pickadate"
+                  [materializeActions]="toDateActions"
+                  [materializeParams]="[{format: 'yyyy-mm-dd'}]">
+                  <label for="to_date" [ngClass]="f.toDate.value !== ''? 'active': ''">To Date</label>
+                </div>
+                <div class="input-field col m6 s12">
+                  <input id="to_time" formControlName="toTime" type="text"
+                  materialize="pickatime"
+                  [materializeActions]="toTimeActions"
+                  [materializeParams]="[{twelvehour: false}]">
+                  <label for="to_time" [ngClass]="f.toTime.value !== ''? 'active': ''">To Time</label>
+                </div>
+              </div>
+            </div>
+            <div class="input-field col s12">
+              <input id="appt_title" formControlName="apptTitle" type="text" class="validate">
+              <label for="first_name" [ngClass]="f.apptTitle.value !== ''? 'active': ''">Title</label>
+            </div>
+            <div class="input-field col s12">
+              <textarea id="appt_desc" formControlName="apptDescription" class="materialize-textarea"></textarea>
+              <label for="first_desc" [ngClass]="f.apptDescription.value !== ''? 'active': ''">Description</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="closeModal()" class="modal-close waves-effect waves-red btn-flat">CLose</button>
+    <button type="submit" (click)="closeModal()" class="modal-close waves-effect waves-green btn-flat">Submit</button>
+  </div>
+</div>

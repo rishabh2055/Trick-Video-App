@@ -1,0 +1,94 @@
+<aside id="left-sidebar-nav">
+  <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y">
+    <li class="user-details cyan darken-2">
+      <div class="row">
+        <div class="col s4 m4 l4">
+          <img src="../../assets/images/avatar.jpg" alt="" class="circle responsive-img valign profile-image">
+        </div>
+        <div class="col s8 m8 l8">
+          <a materialize="dropdown" href='#' data-activates='profile-dropdown' class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn">
+            <span class="user-name" title="Rishabh Chitranshi">Rishabh Chitranshi</span>
+            <i class="material-icons">arrow_drop_down</i>
+          </a>
+          <ul id="profile-dropdown" class="dropdown-content">
+            <li routerLinkActive="active"><a [routerLink] = "'/dashboard'"><i class="material-icons">dashboard</i> Dashboard</a>
+            </li>
+            <li routerLinkActive="active"><a [routerLink] = "'/dashboard'"><i class="material-icons">face</i> Profile</a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="material-icons">keyboard_tab</i> Logout</a>
+            </li>
+          </ul>
+          <p class="user-roal">Doctor</p>
+        </div>
+      </div>
+    </li>
+    <div class="user-list-card card blue-grey darken-1">
+      <div class="card-content white-text">
+        <div class="user-search-wrapper">
+          <i class="material-icons">search</i>
+          <input type="text" name="Search" class="user-search-input z-depth-2" placeholder="Search Patients">
+        </div>
+      </div>
+      <div class="card-action">
+        <perfect-scrollbar class="sidebar-scroll-container">
+          <ul class="contacts">
+            <li class="active" (click)="goToCommunication()">
+              <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                  <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+                </div>
+                <div class="user_info">
+                  <span>Khalid</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                  <img src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg" class="rounded-circle user_img">
+                </div>
+                <div class="user_info">
+                  <span>Taherah Big</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                  <img src="https://i.pinimg.com/originals/ac/b9/90/acb990190ca1ddbb9b20db303375bb58.jpg" class="rounded-circle user_img">
+                </div>
+                <div class="user_info">
+                  <span>Sami Rafi</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                  <img src="http://profilepicturesdp.com/wp-content/uploads/2018/07/sweet-girl-profile-pictures-9.jpg" class="rounded-circle user_img">
+                </div>
+                <div class="user_info">
+                  <span>Nargis Hawa</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                  <img src="https://static.turbosquid.com/Preview/001214/650/2V/boy-cartoon-3D-model_D.jpg" class="rounded-circle user_img">
+                </div>
+                <div class="user_info">
+                  <span>Rashid Samim</span>
+                </div>
+              </div>
+            </li>
+            </ul>
+        </perfect-scrollbar>
+      </div>
+    </div>
+  </ul>
+  <a href="javascript:void(0)" data-activates="slide-out"
+    class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i
+      class="material-icons">menu</i></a>
+</aside>

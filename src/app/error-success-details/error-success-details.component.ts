@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ErrorSuccessDetailsComponent implements OnInit {
   @Input() public isSuccess: boolean;
-  @Input() public serverMessageInfo: object;
+  @Input() public serverMessageInfo: any;
   constructor() { }
 
   ngOnInit(): void {

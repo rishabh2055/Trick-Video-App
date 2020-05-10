@@ -3,19 +3,29 @@ import { NgModule } from '@angular/core';
 import { MaterializeModule } from 'angular2-materialize';
 import { ReactiveFormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import { JwtModule } from '@auth0/angular-jwt';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
+
+import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './shared/header/header.component';
 import { HomeComponent } from './home/home.component';
 import { ErrorSuccessDetailsComponent } from './error-success-details/error-success-details.component';
-export function tokenGetter() {
-  return localStorage.getItem('access_token');
-}
+import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { CommunicationComponent } from './communication/communication.component';
+import { AppointmentComponent } from './shared/appointment/appointment.component';
+//import { ShowHideSidemenuDirective } from './_helpers/show-hide-sidemenu.directive';
 
 @NgModule({
   declarations: [
@@ -25,7 +35,11 @@ export function tokenGetter() {
     SignupComponent,
     HeaderComponent,
     HomeComponent,
-    ErrorSuccessDetailsComponent
+    ErrorSuccessDetailsComponent,
+    SidebarComponent,
+    CommunicationComponent,
+    AppointmentComponent,
+   // ShowHideSidemenuDirective
   ],
   imports: [
     BrowserModule,
@@ -33,16 +47,19 @@ export function tokenGetter() {
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter
-      },
-    }),
+    PerfectScrollbarModule,
+    FullCalendarModule,
+    TextareaAutosizeModule
   ],
   exports: [
     ErrorSuccessDetailsComponent
   ],
-  providers: [],
+  providers: [
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

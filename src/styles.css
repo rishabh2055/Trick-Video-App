@@ -1,6 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~materialize-css/dist/css/materialize.min.css';
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+html {
+  font-family: Muli,sans-serif!important;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6b6f82;
+}
+.breadcrumbs-title {
+  line-height: 1.804rem;
+}
 #sidenav-overlay{
   z-index: 1;
+}
+.material-icons{
+  font-size: 23px;
+}
+.btn, .btn-large, .btn-flat{
+  padding: 0 16px;
+}
+.modal .modal-content {
+  padding: 10px;
 }
 [type="radio"]:not(:checked) + span, [type="radio"]:checked + span {
   position: relative;
@@ -136,4 +159,133 @@ textarea.materialize-textarea {
   font-size: 20px;
   color: white;
   cursor:pointer;
+}
+
+h1 {
+  font-size: 4.2rem;
+  margin: 2.1rem 0 1.68rem;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  color: #333;
+}
+h1, h2, h3, h4, h5, h6, p {
+  font-family: Muli,sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+  line-height: 110%;
+}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  font-weight: inherit;
+}
+a {
+  text-decoration: none;
+}
+.navbar-color {
+  color: #fff;
+  background-color: #00bcd4;
+  width: 100%;
+  line-height: 56px;
+  height: 55px !important;
+}
+#main {
+  padding-left: 240px;
+}
+.wrapper{
+  height: 100%;
+}
+
+.d-flex {
+  display: -ms-flexbox!important;
+  display: flex!important;
+}
+
+.user_img {
+  height: 35px;
+  width: 35px;
+  border: 1.5px solid #f5f6fa;
+}
+.video_cam {
+  margin-left: 50px;
+  margin-top: 5px;
+}
+.video_cam span {
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.rounded-circle {
+  border-radius: 50%!important;
+}
+.user_info {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 14px;
+}
+.user_info span {
+  font-size: 14px;
+  color: white;
+}
+
+.card .card-action{
+  background-color: cadetblue !important;
+}
+
+.sidebar-collapse {
+  position: absolute;
+  left: -170px;
+  top: -45px;
+}
+
+@media only screen and (max-width: 600px) and (min-width: 300px){
+  html {
+    font-size: 10px;
+  }
+  .user_img {
+    height: 30px !important;
+    width: 30px !important;
+    border: 1px solid #f5f6fa !important;
+   }
+  .btn, .btn-large, .btn-flat {
+    padding: 0 8px;
+  }
+}
+@media only screen and (max-width: 990px) and (min-width: 601px){
+  html {
+    font-size: 12px;
+  }
+  .navbar-fixed {
+      height: 55px !important;
+  }
+  .user_img {
+    height: 32px !important;
+    width: 32px !important;
+    border: 1px solid #f5f6fa !important;
+   }
+   .btn, .btn-large, .btn-flat {
+    padding: 0 10px;
+  }
+}
+@media only screen and (max-width: 1190px) and (min-width: 991px){
+  html {
+    font-size: 14.5px;
+  }
+  .btn, .btn-large, .btn-flat {
+    padding: 0 12px;
+  }
+}
+@media only screen and (min-width: 1200px){
+  html {
+      font-size: 15px;
+  }
+  .btn, .btn-large, .btn-flat {
+    padding: 0 14px;
+  }
+}
+
+@media only screen and (max-width: 993px) {
+  #main {
+      padding-left: 0
+  }
 }

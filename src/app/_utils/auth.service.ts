@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject } from 'rxjs';
 
 import {User} from '../models';
 const TOKEN_KEY = 'auth-token';
@@ -9,11 +9,12 @@ const USER_KEY = 'auth-user';
   providedIn: 'root'
 })
 export class AuthService {
-
+  isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
   constructor(
-    private http: HttpClient,
-    private jwtHelper: JwtHelperService
-  ) { }
+    private http: HttpClient
+  ) {
+    this.isLoggedIn.next(this.isAuthenticated());
+   }
 
   authenticate(postData){
     return this.http.post<User>(`/api/user/login`, postData);
@@ -21,6 +22,7 @@ export class AuthService {
 
   signout(){
     localStorage.clear();
+    this.isLoggedIn.next(this.isAuthenticated());
   }
 
   saveToken(token: string){
@@ -33,15 +35,20 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean{
-    return !this.jwtHelper.isTokenExpired(this.getToken());
+    return this.getToken() !== null;
   }
 
   saveUser(user){
     localStorage.removeItem(USER_KEY);
-    localStorage.setItem(USER_KEY, user);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    this.isLoggedIn.next(this.isAuthenticated());
+  }
+
+  get isLoggedInDetails() {
+    return this.isLoggedIn.asObservable();
   }
 
   getUser(){
-    return localStorage.getItem(USER_KEY);
+    return JSON.parse(localStorage.getItem(USER_KEY));
   }
 }

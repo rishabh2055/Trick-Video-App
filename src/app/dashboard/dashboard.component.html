@@ -1,1 +1,28 @@
-<p>dashboard works!</p>
+<div id="main">
+  <div class="wrapper">
+    <app-sidebar></app-sidebar>
+
+    <section id="content">
+      <div class="col s12 m12 l12">
+        <div class="calendar-section">
+          <h2 class="breadcrumbs-title">Dashboard</h2>
+          <full-calendar
+            #calendar
+            defaultView="dayGridMonth"
+            [header]="{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            }"
+            [plugins]="calendarPlugins"
+            [weekends]="calendarWeekends"
+            [events]="calendarEvents"
+            (dateClick)="handleDateClick($event)"
+          ></full-calendar>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<app-appointment></app-appointment>

@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 import config from '../config/auth.config';
 
+const now = new Date();
 class User{
   constructor(){
 
@@ -29,7 +30,8 @@ class User{
         const userDetails = await models.users.findOne({
           where:{
             mobileNo: mobileNo
-          }
+          },
+          raw: true
         });
         if(!userDetails || !userDetails.id){
           console.error('POST.../login failed: mobile no not found');
@@ -50,8 +52,8 @@ class User{
           });
           }else{
             // Password match
-            const expiresTTLms = 60*2*1000; // 2 hour
-            const expiresIn = new Date(now.getTime() + expiresTTLms);
+            const expiresTTLms = 5*2*1000; // 2 hour
+            const expiresIn = now.getTime() + expiresTTLms;
             const token = jwt.sign(userDetails, config.secret, {
               expiresIn: expiresIn
             });
@@ -76,7 +78,6 @@ class User{
         });
       }
 
-      const now = new Date();
       let creationDocument = {
         uid: uuid.v4(),
         firstName: req.body.firstName,
