@@ -19,9 +19,16 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authervice: AuthService,
     private router: Router
-  ) { }
+  ) {
+
+   }
 
   ngOnInit(): void {
+    if (this.authervice.getUnauthorizedError() !== ''){
+      this.showSuccessErrorDetails = true;
+      this.isSuccess = false;
+      this.serverMessageInfo = {message: this.authervice.getUnauthorizedError()};
+    }
     this.loginForm = this.formBuilder.group({
       mobileNo: ['', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]],
       password: ['', Validators.required]

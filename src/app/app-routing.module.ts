@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CommunicationComponent } from './communication/communication.component';
+import { ProfileComponent } from './profile/profile.component';
 import { SignupComponent } from './signup/signup.component';
 
 import { AuthGuardService } from './_helpers/auth-guard.service';
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'signup' , component: SignupComponent, canActivate: [LoggedOutGuardSevice]},
   {path: 'dashboard' , component: DashboardComponent, canActivate: [AuthGuardService]},
   {path: 'communication' , component: CommunicationComponent, canActivate: [AuthGuardService]},
+  {path: 'profile' , component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: '**', redirectTo: '' }
 ];
 

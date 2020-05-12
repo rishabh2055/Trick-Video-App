@@ -10,6 +10,7 @@ const USER_KEY = 'auth-user';
 })
 export class AuthService {
   isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+  unAuthorizedError = '';
   constructor(
     private http: HttpClient
   ) {
@@ -23,6 +24,14 @@ export class AuthService {
   signout(){
     localStorage.clear();
     this.isLoggedIn.next(this.isAuthenticated());
+  }
+
+  setUnauthorizedError(){
+    this.unAuthorizedError = 'Unauthorized access! Session expired.';
+  }
+
+  getUnauthorizedError(){
+    return this.unAuthorizedError;
   }
 
   saveToken(token: string){

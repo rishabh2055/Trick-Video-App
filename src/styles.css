@@ -206,14 +206,12 @@ a {
   border: 1.5px solid #f5f6fa;
 }
 .video_cam {
-  margin-left: 50px;
-  margin-top: 5px;
+  margin-top: 3px;
 }
-.video_cam span {
+.video_cam a {
   color: white;
   font-size: 20px;
   cursor: pointer;
-  margin-right: 20px;
 }
 .rounded-circle {
   border-radius: 50%!important;
@@ -238,6 +236,23 @@ a {
   top: -45px;
 }
 
+.picker__day--infocus {
+  padding: 7px 0;
+  width: 28px;
+}
+.card .card-title {
+  font-size: 16px;
+}
+.card .card-content {
+  padding: 24px 30px;
+}
+.fc-event-container a:hover {
+  -webkit-box-shadow : -4px 6px 6px -4px rgba(0,0,0,0.75);
+  -moz-box-shadow : -4px 6px 6px -4px rgba(0,0,0,0.75);
+   box-shadow : -4px 6px 6px -4px rgba(0,0,0,0.75);
+   cursor : pointer;
+}
+
 @media only screen and (max-width: 600px) and (min-width: 300px){
   html {
     font-size: 10px;
@@ -249,6 +264,9 @@ a {
    }
   .btn, .btn-large, .btn-flat {
     padding: 0 8px;
+  }
+  .input-field label:not(.label-icon).active {
+    transform: translateY(-8px) scale(0.8);
   }
 }
 @media only screen and (max-width: 990px) and (min-width: 601px){
@@ -266,6 +284,12 @@ a {
    .btn, .btn-large, .btn-flat {
     padding: 0 10px;
   }
+  .input-field label:not(.label-icon).active {
+    transform: translateY(-10px) scale(0.8);
+  }
+  .card .card-title {
+    font-size: 16px;
+  }
 }
 @media only screen and (max-width: 1190px) and (min-width: 991px){
   html {
@@ -273,6 +297,12 @@ a {
   }
   .btn, .btn-large, .btn-flat {
     padding: 0 12px;
+  }
+  .input-field label:not(.label-icon).active {
+    transform: translateY(-12px) scale(0.8);
+  }
+  .card .card-title {
+    font-size: 18px;
   }
 }
 @media only screen and (min-width: 1200px){
@@ -282,10 +312,30 @@ a {
   .btn, .btn-large, .btn-flat {
     padding: 0 14px;
   }
+  .input-field label:not(.label-icon).active {
+    transform: translateY(-14px) scale(0.8);
+  }
+  .card .card-title {
+    font-size: 18px;
+  }
 }
 
 @media only screen and (max-width: 993px) {
   #main {
       padding-left: 0
   }
+}
+
+@media only screen and (min-width: 601px){
+ .picker__day--infocus {
+    padding: 5px;
+    height: 30px;
+    width: 34px;
+ }
+}
+
+@media only screen and (min-width: 601px){
+ .navbar-fixed {
+    height: 55px;
+ }
 }

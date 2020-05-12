@@ -4,7 +4,12 @@
 
     <section id="content">
       <div class="col s12 m12 l12">
-        <div class="calendar-section">
+        <app-error-success-details
+            *ngIf="showSuccessErrorDetails"
+            [isSuccess] = "isSuccess"
+            [serverMessageInfo] = "serverMessageInfo"
+          ></app-error-success-details>
+        <div class="calendar-section" *ngIf="showCalendar">
           <h2 class="breadcrumbs-title">Dashboard</h2>
           <full-calendar
             #calendar
@@ -18,6 +23,7 @@
             [weekends]="calendarWeekends"
             [events]="calendarEvents"
             (dateClick)="handleDateClick($event)"
+            (eventClick)="handleEventClick($event)"
           ></full-calendar>
         </div>
       </div>
@@ -25,4 +31,4 @@
   </div>
 </div>
 
-<app-appointment></app-appointment>
+<app-appointment (getAppointments) = "getAllAppointments()"></app-appointment>

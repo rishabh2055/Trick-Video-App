@@ -18,7 +18,7 @@ exports.verifyToken = (req, res, next) => {
         message: "Unauthorized!"
       });
     }
-    req.userId = decoded.id;
+    req.user = decoded;
     next();
   })
 };
@@ -39,7 +39,7 @@ const getToken = headers => {
 exports.isDoctor = async (req, res, next) => {
   const userDetails = await models.users.findOne({
     where:{
-      uid: req.userUid,
+      uid: req.user.uid,
       isActive: true
     }
   });
@@ -48,13 +48,15 @@ exports.isDoctor = async (req, res, next) => {
     return res.status(403).send({
       message: "Access denied! logged in user should be doctor only"
     });
+  }else{
+    next();
   }
 };
 
 exports.isPatient = async (req, res, next) => {
   const userDetails = await models.users.findOne({
     where:{
-      uid: req.userUid,
+      uid: req.user.uid,
       isActive: true
     }
   });
@@ -65,6 +67,5 @@ exports.isPatient = async (req, res, next) => {
     });
   }else{
     next();
-    return;
   }
 };

@@ -1,8 +1,10 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { MaterializeAction } from 'angular2-materialize';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-const moment = require('moment');
+import { AppointmentService } from '../../_utils/appointment.service';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-appointment',
@@ -10,6 +12,7 @@ const moment = require('moment');
   styleUrls: ['./appointment.component.css']
 })
 export class AppointmentComponent implements OnInit {
+  @Output() getAppointments = new EventEmitter();
   modalActions = new EventEmitter<string|MaterializeAction>();
   fromDateActions = new EventEmitter<string|MaterializeAction>();
   fromTimeActions = new EventEmitter<string|MaterializeAction>();
@@ -20,8 +23,11 @@ export class AppointmentComponent implements OnInit {
   isSuccess = false;
   showSuccessErrorDetails = false;
   serverMessageInfo: object = {};
+  currentUser: any = {};
+  deleteAppointment = false;
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private apptService: AppointmentService
     ) { }
 
   ngOnInit(): void {
@@ -39,22 +45,23 @@ export class AppointmentComponent implements OnInit {
     event.stopPropagation();
   }
 
-  openModal(dateObj: any) {
-    this.apptForm.patchValue({
-      apptTitle: '',
-      apptDescription: '',
-      fromDate: '',
-      fromTIme: '',
-      toDate: '',
-      toTime: ''
-    });
+  openModal(apptObj: any) {
+    this.submitted = false;
+    if(apptObj.title){
+      this.deleteAppointment = true;
+      this.apptForm.disable();
+    }else{
+      this.deleteAppointment = false;
+      this.apptForm.enable();
+    }
     this.modalActions.emit({action : 'modal', params : ['open']});
-    const getSelectedDateObj = moment(dateObj.date);
     this.apptForm.patchValue({
-      fromDate: getSelectedDateObj.format('YYYY-MM-DD'),
-      toDate: getSelectedDateObj.format('YYYY-MM-DD'),
-      fromTime: getSelectedDateObj.format('HH:mm') === '00:00' ? '' : getSelectedDateObj.format('HH:mm'),
-      toTime: getSelectedDateObj.format('HH:mm') === '00:00' ? '' : getSelectedDateObj.format('HH:mm'),
+      fromDate: (apptObj.fromDate) ? apptObj.fromDate : moment(apptObj.date).format('YYYY-MM-DD'),
+      toDate: (apptObj.toDate) ? apptObj.toDate : moment(apptObj.date).format('YYYY-MM-DD'),
+      fromTime: (apptObj.fromTime) ? apptObj.fromTime : moment(apptObj.date).format('HH:mm') === '00:00' ? '' : moment(apptObj.date).format('HH:mm'),
+      toTime: (apptObj.toTime) ? apptObj.toTime : moment(apptObj.date).format('HH:mm') === '00:00' ? '' : moment(apptObj.date).format('HH:mm'),
+      apptTitle : (apptObj.title) ? apptObj.title : '',
+      apptDescription : (apptObj.description) ? apptObj.description : ''
    });
   }
 
@@ -72,6 +79,52 @@ export class AppointmentComponent implements OnInit {
     if (this.apptForm.invalid) {
       return;
     }
+    if (this.deleteAppointment){
+      this.apptService.deleteAppointment(this.apptForm.value).subscribe(
+        (response: any) => {
+          this.closeModal();
+          this.getAppointments.emit();
+        }, (error) => {
+          this.showSuccessErrorDetails = true;
+          this.isSuccess = false;
+          this.serverMessageInfo = error.error;
+        }
+      );
+    }else{
+      this.apptService.addNewAppointment(this.apptForm.value).subscribe(
+        (response: any) => {
+          this.closeModal();
+          this.getAppointments.emit();
+        }, (error) => {
+          this.showSuccessErrorDetails = true;
+          this.isSuccess = false;
+          this.serverMessageInfo = error.error;
+        }
+      );
+    }
+  }
+
+  onDelete(): void {
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.apptForm.invalid) {
+      return;
+    }
+    this.apptService.addNewAppointment(this.apptForm.value).subscribe(
+      (response: any) => {
+        this.showSuccessErrorDetails = true;
+        this.isSuccess = true;
+        response.message = 'Appointment details added successfully.';
+        this.serverMessageInfo = response;
+        this.closeModal();
+        this.getAppointments.emit();
+      }, (error) => {
+        this.showSuccessErrorDetails = true;
+        this.isSuccess = false;
+        this.serverMessageInfo = error.error;
+      }
+    );
   }
 
 }

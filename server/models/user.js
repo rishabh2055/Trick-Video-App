@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       field: '"InvalidAttempt"'
     },
     firstLogin: {
-      type: DataTypes.DATE,
+      type: DataTypes.BOOLEAN,
       allowNull: true,
       field: '"FirstLogin'
     },

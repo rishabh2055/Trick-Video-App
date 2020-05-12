@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MaterializeModule } from 'angular2-materialize';
 import { ReactiveFormsModule } from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -11,6 +11,8 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+import { AuthInterceptor } from './_helpers/auth.interceptor.service';
 
 import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 
@@ -25,6 +27,7 @@ import { ErrorSuccessDetailsComponent } from './error-success-details/error-succ
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { CommunicationComponent } from './communication/communication.component';
 import { AppointmentComponent } from './shared/appointment/appointment.component';
+import { ProfileComponent } from './profile/profile.component';
 //import { ShowHideSidemenuDirective } from './_helpers/show-hide-sidemenu.directive';
 
 @NgModule({
@@ -39,6 +42,7 @@ import { AppointmentComponent } from './shared/appointment/appointment.component
     SidebarComponent,
     CommunicationComponent,
     AppointmentComponent,
+    ProfileComponent,
    // ShowHideSidemenuDirective
   ],
   imports: [
@@ -58,6 +62,11 @@ import { AppointmentComponent } from './shared/appointment/appointment.component
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

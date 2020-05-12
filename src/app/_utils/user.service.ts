@@ -14,4 +14,8 @@ export class UserService {
   registerNewUser(postData){
     return this.http.post<User>(`/api/user/signup`, postData);
   }
+
+  getLoggedInUserDetails(user){
+    return this.http.get<User>(`/api/user/${user.uid}/me`);
+  }
 }

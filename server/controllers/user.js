@@ -4,7 +4,10 @@ import bcrypt from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 import config from '../config/auth.config';
 
+import * as moment from 'moment';
+
 const now = new Date();
+const uuidRegex = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/;
 class User{
   constructor(){
 
@@ -14,7 +17,7 @@ class User{
     try{
       if(!req.body){
         console.error('POST .../login failed: no body provided');
-        return res.status(401).send({
+        return res.status(400).send({
           message: 'Authentication failed. no body provided'
         });
       }
@@ -22,7 +25,7 @@ class User{
       const password = req.body.password;
       if((mobileNo === '' || mobileNo === undefined) || (password === '' || password === undefined)){
         console.error('POST .../login failed: mobileNo or password is required');
-        return res.status(401).send({
+        return res.status(400).send({
           message: 'Authentication failed. MobileNo or Password is required'
         });
       }else{
@@ -35,7 +38,7 @@ class User{
         });
         if(!userDetails || !userDetails.id){
           console.error('POST.../login failed: mobile no not found');
-          return res.status(401).send({
+          return res.status(400).send({
             message: 'Invalid mobile no or password'
           });
         }else if(!userDetails.isActive){
@@ -47,13 +50,46 @@ class User{
           // Password doesn't match
           if(!bcrypt.compareSync(password, userDetails.hash)){
             console.error("POST.../login failed: password doesn't match");
-          return res.status(401).send({
+          return res.status(400).send({
             message: 'Invalid mobile no or password'
           });
           }else{
+            // check lastLogin and firstLogin
+            await models.sequelize.transaction(async t => {
+              if(userDetails.firstLogin === null){
+                await models.users.update({
+                  firstLogin: true,
+                  lastLogin: now
+                },
+                {
+                  returning: true,
+                  where: {
+                      uid: userDetails.uid
+                  },
+                  attributes: ['id', 'updated'],
+                  transaction: t,
+                }
+                );
+                userDetails.firstLogin = true;
+              }else{
+                await models.users.update({
+                  firstLogin: false,
+                  lastLogin: now
+                },
+                {
+                  returning: true,
+                  where: {
+                      uid: userDetails.uid
+                  },
+                  attributes: ['id', 'updated'],
+                  transaction: t,
+                }
+                );
+              }
+            });
+
             // Password match
-            const expiresTTLms = 5*2*1000; // 2 hour
-            const expiresIn = now.getTime() + expiresTTLms;
+            const expiresIn = 60 * 5 * 1000; // 5 minute
             const token = jwt.sign(userDetails, config.secret, {
               expiresIn: expiresIn
             });
@@ -66,6 +102,9 @@ class User{
       }
     }catch(error){
       console.error(`Error on POST .../login failed: ${error}`);
+      return res.status(503).json({
+        message: 'Failed to login'
+      });
     }
   }
 
@@ -73,7 +112,7 @@ class User{
     try{
       if(!req.body){
         console.error('POST .../signup failed: no body provided');
-        return res.status(401).send({
+        return res.status(400).send({
           message: 'Registration failed. no body provided'
         });
       }
@@ -118,6 +157,39 @@ class User{
       });
     }catch(error){
       console.error(`Error on POST .../signup failed: ${error}`);
+      return res.status(503).json({
+        message: 'Failed to register new user'
+      });
+    }
+  }
+
+  static async getMe(req, res){
+    try{
+      const userUid = req.params.uid;
+      if (!uuidRegex.test(userUid.toUpperCase())) {
+        console.error('GET .../me failed: Invalid user UUID');
+        return res.status(400).send({
+          message: 'Invalid user UUID'
+        });
+      }
+      const userDetails = req.user;
+      if(userDetails.isDoctor){
+        const doctorDetails = await models.doctors.findOne({
+          where: {
+            userId: userDetails.id
+          },
+          raw: true
+        });
+        if(doctorDetails){
+          userDetails.doctorProfile = doctorDetails;
+        }
+      }
+      return res.status(200).json(userDetails);
+    }catch(error){
+      console.error(`Error on GET .../me failed: ${error}`);
+      return res.status(503).json({
+        message: 'Failed to get user details'
+      });
     }
   }
 }
