@@ -3,11 +3,13 @@
     <li class="user-details cyan darken-2">
       <div class="row">
         <div class="col s4 m4 l4">
-          <img src="../../assets/images/avatar.jpg" alt="" class="circle responsive-img valign profile-image">
+          <div class="light-blue lighten-5 profile-image">{{loggedInUserDetails.firstName.toUpperCase().charAt(0)}}{{loggedInUserDetails.lastName.toUpperCase().charAt(0)}}</div>
         </div>
         <div class="col s8 m8 l8">
           <a materialize="dropdown" href='#' data-activates='profile-dropdown' class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn">
-            <span class="user-name" title="Rishabh Chitranshi">Rishabh Chitranshi</span>
+            <span class="user-name" title="{{loggedInUserDetails.firstName}} {{loggedInUserDetails.lastName}}">
+              {{loggedInUserDetails.firstName}} {{loggedInUserDetails.lastName}}
+            </span>
             <i class="material-icons">arrow_drop_down</i>
           </a>
           <ul id="profile-dropdown" class="dropdown-content">
@@ -33,53 +35,11 @@
       <div class="card-action">
         <perfect-scrollbar class="sidebar-scroll-container">
           <ul class="contacts">
-            <li class="active waves-effect waves-light" (click)="goToCommunication()">
+            <li *ngFor="let user of userLists" [ngClass]="userUid === user.uid? 'active': ''" class="waves-effect waves-light" (click)="goToCommunication(user)">
               <div class="d-flex bd-highlight">
-                <div class="img_cont">
-                  <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
-                </div>
+                <div class="light-blue lighten-5 chat-user-img">{{user.firstName.toUpperCase().charAt(0)}}{{user.lastName.toUpperCase().charAt(0)}}</div>
                 <div class="user_info">
-                  <span>Khalid</span>
-                </div>
-              </div>
-            </li>
-            <li class="waves-effect waves-light">
-              <div class="d-flex bd-highlight">
-                <div class="img_cont">
-                  <img src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg" class="rounded-circle user_img">
-                </div>
-                <div class="user_info">
-                  <span>Taherah Big</span>
-                </div>
-              </div>
-            </li>
-            <li class="waves-effect waves-light">
-              <div class="d-flex bd-highlight">
-                <div class="img_cont">
-                  <img src="https://i.pinimg.com/originals/ac/b9/90/acb990190ca1ddbb9b20db303375bb58.jpg" class="rounded-circle user_img">
-                </div>
-                <div class="user_info">
-                  <span>Sami Rafi</span>
-                </div>
-              </div>
-            </li>
-            <li class="waves-effect waves-light">
-              <div class="d-flex bd-highlight">
-                <div class="img_cont">
-                  <img src="http://profilepicturesdp.com/wp-content/uploads/2018/07/sweet-girl-profile-pictures-9.jpg" class="rounded-circle user_img">
-                </div>
-                <div class="user_info">
-                  <span>Nargis Hawa</span>
-                </div>
-              </div>
-            </li>
-            <li class="waves-effect waves-light">
-              <div class="d-flex bd-highlight">
-                <div class="img_cont">
-                  <img src="https://static.turbosquid.com/Preview/001214/650/2V/boy-cartoon-3D-model_D.jpg" class="rounded-circle user_img">
-                </div>
-                <div class="user_info">
-                  <span>Rashid Samim</span>
+                  <span>{{user.firstName}} {{user.lastName}}</span>
                 </div>
               </div>
             </li>

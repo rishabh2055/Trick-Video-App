@@ -14,8 +14,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 import { AuthInterceptor } from './_helpers/auth.interceptor.service';
 
-import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -28,6 +26,8 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { CommunicationComponent } from './communication/communication.component';
 import { AppointmentComponent } from './shared/appointment/appointment.component';
 import { ProfileComponent } from './profile/profile.component';
+import { VideoCallComponent } from './communication/video-call/video-call.component';
+
 //import { ShowHideSidemenuDirective } from './_helpers/show-hide-sidemenu.directive';
 
 @NgModule({
@@ -43,6 +43,7 @@ import { ProfileComponent } from './profile/profile.component';
     CommunicationComponent,
     AppointmentComponent,
     ProfileComponent,
+    VideoCallComponent,
    // ShowHideSidemenuDirective
   ],
   imports: [
@@ -52,8 +53,7 @@ import { ProfileComponent } from './profile/profile.component';
     ReactiveFormsModule,
     HttpClientModule,
     PerfectScrollbarModule,
-    FullCalendarModule,
-    TextareaAutosizeModule
+    FullCalendarModule
   ],
   exports: [
     ErrorSuccessDetailsComponent

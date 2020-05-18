@@ -17,7 +17,7 @@ const routes: Routes = [
   {path: 'login' , component: LoginComponent, canActivate: [LoggedOutGuardSevice]},
   {path: 'signup' , component: SignupComponent, canActivate: [LoggedOutGuardSevice]},
   {path: 'dashboard' , component: DashboardComponent, canActivate: [AuthGuardService]},
-  {path: 'communication' , component: CommunicationComponent, canActivate: [AuthGuardService]},
+  {path: 'communication/:uid' , component: CommunicationComponent, canActivate: [AuthGuardService]},
   {path: 'profile' , component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: '**', redirectTo: '' }
 ];

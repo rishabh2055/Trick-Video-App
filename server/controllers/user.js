@@ -89,7 +89,7 @@ class User{
             });
 
             // Password match
-            const expiresIn = 60 * 5 * 1000; // 5 minute
+            const expiresIn = 24 * 3600; // 24 hours
             const token = jwt.sign(userDetails, config.secret, {
               expiresIn: expiresIn
             });
@@ -163,7 +163,29 @@ class User{
     }
   }
 
-  static async getMe(req, res){
+  static async getAllUsers(req, res){
+    try{
+      const usersList = await models.users.findAll({
+        where: {
+          isActive: true,
+          id: {
+            [models.Sequelize.Op.not]: req.user.id
+          }
+        },
+        raw: true
+      });
+      if(usersList){
+        return res.status(200).json(usersList);
+      }
+    }catch(error){
+      console.error(`Error on GET .../all failed: ${error}`);
+      return res.status(503).json({
+        message: 'Failed to get all users list'
+      });
+    }
+  }
+
+  static async getUser(req, res){
     try{
       const userUid = req.params.uid;
       if (!uuidRegex.test(userUid.toUpperCase())) {
@@ -172,8 +194,13 @@ class User{
           message: 'Invalid user UUID'
         });
       }
-      const userDetails = req.user;
-      if(userDetails.isDoctor){
+      const userDetails = await models.users.findOne({
+        where: {
+          uid: userUid
+        },
+        raw: true
+      });
+      if(userDetails && userDetails.isDoctor){
         const doctorDetails = await models.doctors.findOne({
           where: {
             userId: userDetails.id

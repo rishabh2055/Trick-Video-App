@@ -15,7 +15,7 @@ export class UserService {
     return this.http.post<User>(`/api/user/signup`, postData);
   }
 
-  getLoggedInUserDetails(user){
-    return this.http.get<User>(`/api/user/${user.uid}/me`);
+  getUserDetails(uid){
+    return this.http.get<User>(`/api/user/${uid}`);
   }
 }

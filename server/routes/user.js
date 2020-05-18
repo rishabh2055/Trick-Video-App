@@ -7,6 +7,7 @@ import authReq from '../middlewares/authJWT';
 
 router.post('/login', User.login);
 router.post('/signup', [verifyUser.checkDuplicateMobileNoOrEmail], User.signup);
-router.get('/:uid/me', [authReq.verifyToken], User.getMe);
+router.get('/all', [authReq.verifyToken], User.getAllUsers);
+router.get('/:uid', [authReq.verifyToken], User.getUser);
 
 module.exports = router;

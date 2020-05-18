@@ -20,10 +20,16 @@ ul.side-nav.leftside-navigation li.user-details {
   -o-background-size: cover;
   background-size: cover;
 }
-.user-details img{
-  margin: 10px 0 0 0px;
-  height: 50px;
-  width: 50px;
+.user-details .profile-image{
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+  font-size: 25px;
+  color: #ff6f00;
+  line-height: 55px;
+  text-align: center;
+  font-family: monospace;
+  margin: 10px 0 0 0;
 }
 ul.side-nav.leftside-navigation li {
   line-height: 44px;
@@ -149,7 +155,6 @@ input.user-search-input {
   position: relative;
   height: 35px;
   width: 35px;
-  padding: 4px 0;
 }
 .contacts li {
   width: 100% !important;
@@ -159,4 +164,15 @@ input.user-search-input {
 .contacts li.active, .contacts li:hover {
   background-color: rgba(0,0,0,0.3) !important;
   cursor: pointer;
+}
+.chat-user-img{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: #ff6f00;
+  line-height: 35px;
+  text-align: center;
+  font-family: monospace;
+  margin: 2% 0 0 0;
 }
