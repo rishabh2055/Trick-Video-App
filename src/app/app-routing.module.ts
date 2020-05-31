@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CommunicationComponent } from './communication/communication.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SignupComponent } from './signup/signup.component';
+import { VideoCallComponent } from './shared/video-call/video-call.component';
 
 import { AuthGuardService } from './_helpers/auth-guard.service';
 import { LoggedOutGuardSevice } from './_helpers/logged-out.guard.service';
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'signup' , component: SignupComponent, canActivate: [LoggedOutGuardSevice]},
   {path: 'dashboard' , component: DashboardComponent, canActivate: [AuthGuardService]},
   {path: 'communication/:uid' , component: CommunicationComponent, canActivate: [AuthGuardService]},
+  {path: 'video-call/:uid' , component: VideoCallComponent, canActivate: [AuthGuardService]},
   {path: 'profile' , component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: '**', redirectTo: '' }
 ];

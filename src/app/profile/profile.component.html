@@ -2,7 +2,212 @@
   <div class="wrapper">
     <app-sidebar></app-sidebar>
     <section id="content">
-
+      <div class="row ">
+        <!--start column-->
+        <div class="col s12">
+          <app-error-success-details *ngIf="showSuccessErrorDetails" [isSuccess]="isSuccess"
+            [serverMessageInfo]="serverMessageInfo"></app-error-success-details>
+          <div class="card-panel grey lighten-5 z-depth-1">
+            <div class="row">
+              <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                <div class="col s12">
+                  <div class="center-align">
+                    <h4>Profile Information</h4>
+                  </div>
+                  <div class="row form-row">
+                    <div class="col m6 s12 center-align">
+                      <span class="profile-image-section">
+                        <img id="userImage" [src]="userImageSRC" alt=""
+                          class="responsive-img profile-img">
+                        <div class="middle">
+                          <button type="button" (click)="chooseImage()" class="btn waves-effect waves-light">Change image</button>
+                          <div style="height:0px;overflow:hidden">
+                            <input #fileInput type="file" id="fileInput" name="fileInput" ng2FileSelect [uploader]="uploader" (change)="fileChangeEvent($event)" />
+                         </div>
+                        </div>
+                      </span>
+                    </div>
+                    <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.firstName.errors }">
+                      <input id="first_name" formControlName="firstName" type="text" class="validate">
+                      <label for="first_name" [ngClass]="f.firstName.value !== ''? 'active': ''">First Name</label>
+                      <span *ngIf="submitted && f.firstName.errors" class="helper-text">
+                        <span *ngIf="f.firstName.errors.required">First name is required</span>
+                        <span *ngIf="f.firstName.errors.maxlength">First name be maximum 100 characters</span>
+                        <span *ngIf="f.firstName.errors.minlength">First name must be at least 2 characters</span>
+                      </span>
+                    </div>
+                    <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.lastName.errors }">
+                      <input id="last_name" formControlName="lastName" type="text" class="validate">
+                      <label for="last_name" [ngClass]="f.lastName.value !== ''? 'active': ''">Last Name</label>
+                      <span *ngIf="submitted && f.lastName.errors" class="helper-text">
+                        <span *ngIf="f.lastName.errors.required">Last name is required</span>
+                        <span *ngIf="f.lastName.errors.maxlength">Last name be maximum 100 characters</span>
+                        <span *ngIf="f.lastName.errors.minlength">Last name must be at least 2 characters</span>
+                      </span>
+                    </div>
+                    <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.clinicName.errors }">
+                      <input id="clinic_name" formControlName="clinicName" type="text" class="validate">
+                      <label for="clinic_name" [ngClass]="f.clinicName.value !== ''? 'active': ''">Clinic / Hospital
+                        name</label>
+                      <span *ngIf="submitted && f.clinicName.errors" class="helper-text">
+                        <span *ngIf="f.clinicName.errors.required">Clinic/Hospital name is required</span>
+                        <span *ngIf="f.clinicName.errors.maxlength">Clinic/Hospital name be maximum 100
+                          characters</span>
+                        <span *ngIf="f.clinicName.errors.minlength">Clinic/Hospital name must be at least 6
+                          characters</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row form-row">
+                    <div class="input-field col m6 s12">
+                      <input id="mobile_no" type="text" formControlName="mobileNo" class="validate">
+                      <label for="mobile_no" [ngClass]="f.mobileNo.value !== ''? 'active': ''">Mobile no</label>
+                    </div>
+                    <div class="input-field col m6 s12">
+                      <input id="user_email" type="text" formControlName="email" class="validate">
+                      <label for="user_email" [ngClass]="f.email.value !== ''? 'active': ''">Email</label>
+                    </div>
+                    <div class="row form-row">
+                      <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.aadharNo.errors }">
+                        <input id="aadhar_no" formControlName="aadharNo" type="text" class="validate">
+                        <label for="aadhar_no" [ngClass]="f.aadharNo.value !== ''? 'active': ''">Aadhar No</label>
+                        <span *ngIf="submitted && f.aadharNo.errors" class="helper-text">
+                          <span *ngIf="f.aadharNo.errors.required">Aadhar no is required</span>
+                          <span *ngIf="f.aadharNo.errors.pattern">Must be a valid Aadhar no</span>
+                        </span>
+                      </div>
+                      <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.regNo.errors }">
+                        <input id="reg_no" formControlName="regNo" type="text" class="validate">
+                        <label for="reg_no" [ngClass]="f.regNo.value !== ''? 'active': ''">Registration No</label>
+                        <span *ngIf="submitted && f.regNo.errors" class="helper-text">
+                          <span *ngIf="f.regNo.errors.required">Registration no is required</span>
+                          <span *ngIf="f.regNo.errors.minlength">Registration no must be at least 6 characters</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row form-row">
+                    <div class="input-field col m6 s12"
+                      [ngClass]="{ 'has-error': submitted && f.consultationFee.errors }">
+                      <input id="consultation_fee" formControlName="consultationFee" type="text" class="validate">
+                      <label for="consultation_fee" [ngClass]="f.consultationFee.value !== ''? 'active': ''">Consultation fee</label>
+                      <span *ngIf="submitted && f.consultationFee.errors" class="helper-text">
+                        <span *ngIf="f.consultationFee.errors.required">Consultation fee is required</span>
+                          <span *ngIf="f.consultationFee.errors.pattern">Must be a valid amount</span>
+                      </span>
+                    </div>
+                    <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.department.errors }">
+                      <select multiple materialize="material_select" [materializeSelectOptions]="allDepartments"
+                        formControlName="department">
+                        <option value="" disabled selected>Choose your departments</option>
+                        <option *ngFor="let department of allDepartments" [value]="department.id">{{department.name}}
+                        </option>
+                      </select>
+                      <label for="department" class="active">Department</label>
+                      <span *ngIf="submitted && f.department.errors" class="helper-text">
+                        <span *ngIf="f.department.errors.required">Department is required</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row form-row">
+                    <div class="input-field col m6 s12"
+                      [ngClass]="{ 'has-error': submitted && f.specialization.errors }">
+                      <textarea id="specialization" formControlName="specialization"
+                        class="materialize-textarea"></textarea>
+                      <label for="specialization"
+                        [ngClass]="f.specialization.value !== ''? 'active': ''">Specialization</label>
+                      <span *ngIf="submitted && f.specialization.errors" class="helper-text">
+                        <span *ngIf="f.specialization.errors.required">Specialization is required</span>
+                        <span *ngIf="f.specialization.errors.maxlength">Specialization be maximum 500 characters</span>
+                        <span *ngIf="f.specialization.errors.minlength">Specialization must be at least 6
+                          characters</span>
+                      </span>
+                    </div>
+                    <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.experience.errors }">
+                      <textarea id="experience" formControlName="experience" class="materialize-textarea"></textarea>
+                      <label for="experience" [ngClass]="f.experience.value !== ''? 'active': ''">Experience</label>
+                      <span *ngIf="submitted && f.experience.errors" class="helper-text">
+                        <span *ngIf="f.experience.errors.required">Experience is required</span>
+                        <span *ngIf="f.experience.errors.maxlength">Experience be maximum 500 characters</span>
+                        <span *ngIf="f.experience.errors.minlength">Experience must be at least 6 characters</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row form-row">
+                    <div class="input-field col m6 s12"
+                      [ngClass]="{ 'has-error': submitted && f.state.errors }">
+                      <input id="state" formControlName="state" type="text"  class="autocomplete"
+                      name="state" materialize="autocomplete"
+                      [materializeParams]="[stateInstance]">
+                      <label for="state" [ngClass]="f.state.value !== ''? 'active': ''">State</label>
+                      <span *ngIf="submitted && f.state.errors" class="helper-text">
+                        <span *ngIf="f.state.errors.required">State is required</span>
+                      </span>
+                    </div>
+                    <div class="input-field col m6 s12"
+                      [ngClass]="{ 'has-error': submitted && f.city.errors }">
+                      <input #city id="city" formControlName="city" type="text"  class="autocomplete"
+                      name="state" materialize="autocomplete"
+                      [materializeParams]="[cityInstance]">
+                      <label for="city" [ngClass]="f.state.value !== ''? 'active': ''">City</label>
+                      <span *ngIf="submitted && f.city.errors" class="helper-text">
+                        <span *ngIf="f.city.errors.required">City is required</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row form-row">
+                    <div class="input-field col m6 s12"
+                      [ngClass]="{ 'has-error': submitted && f.qualification.errors }">
+                      <textarea id="qualification" formControlName="qualification"
+                        class="materialize-textarea"></textarea>
+                      <label for="qualification"
+                        [ngClass]="f.qualification.value !== ''? 'active': ''">Qualification</label>
+                      <span *ngIf="submitted && f.qualification.errors" class="helper-text">
+                        <span *ngIf="f.qualification.errors.required">Qualification is required</span>
+                        <span *ngIf="f.qualification.errors.maxlength">Qualification be maximum 500 characters</span>
+                        <span *ngIf="f.qualification.errors.minlength">Qualification must be at least 6
+                          characters</span>
+                      </span>
+                    </div>
+                    <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.address.errors }">
+                      <textarea id="address" formControlName="address" class="materialize-textarea"></textarea>
+                      <label for="address" [ngClass]="f.address.value !== ''? 'active': ''">Address</label>
+                      <span *ngIf="submitted && f.address.errors" class="helper-text">
+                        <span *ngIf="f.address.errors.required">Address is required</span>
+                        <span *ngIf="f.address.errors.maxlength">Address be maximum 500 characters</span>
+                        <span *ngIf="f.address.errors.minlength">Address must be at least 6 characters</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row form-row">
+                    <div class="input-field col s12" [ngClass]="{ 'has-error': submitted && f.aboutYourself.errors }">
+                      <textarea id="aboutYourself" rows="4" formControlName="aboutYourself" class="materialize-textarea"></textarea>
+                      <label for="aboutYourself" [ngClass]="f.aboutYourself.value !== ''? 'active': ''">Tell us more about yourself</label>
+                      <span *ngIf="submitted && f.aboutYourself.errors" class="helper-text">
+                        <span *ngIf="f.aboutYourself.errors.required">Address is required</span>
+                        <span *ngIf="f.aboutYourself.errors.maxlength">Address be maximum 1000 characters</span>
+                        <span *ngIf="f.aboutYourself.errors.minlength">Address must be at least 6 characters</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col s12 center-align top-2">
+                  <div class="row">
+                    <div class="col s12">
+                      <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                        <i class="material-icons right">send</i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!--end column-->
+      </div>
     </section>
   </div>
 </div>
+
+<app-image-uploader (onImageCropped) = "imageCropped($event)"></app-image-uploader>

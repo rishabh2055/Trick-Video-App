@@ -253,6 +253,28 @@ a {
    cursor : pointer;
 }
 
+.input-field.col .dropdown-content [type="checkbox"]+label {
+  top: -1px !important;
+}
+
+[type="checkbox"]+label{
+  display: inline !important;
+}
+
+[type="checkbox"]+label:before, [type="checkbox"]:not(.filled-in)+label:after{
+  margin-top: 0 !important;
+}
+.form-row{
+  margin-bottom: 0 !important;
+}
+.select-wrapper+label {
+  top: 0 !important;
+  font-size: 1rem !important;
+}
+.autocomplete-content{
+  margin-top: 0 !important;
+}
+
 @media only screen and (max-width: 600px) and (min-width: 300px){
   html {
     font-size: 10px;

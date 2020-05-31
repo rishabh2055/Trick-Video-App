@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-import { SignalData } from 'simple-peer';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class SocketIOService {
   }
 
   public connect() {
-    this.socket = io(`http://localhost:3000?token=${this.authService.getToken()}`);
+    this.socket = io(`http://localhost:4000?token=${this.authService.getToken()}`);
   }
 
   public sendChat(chatInfo) {
@@ -35,14 +34,18 @@ export class SocketIOService {
 
   public getIncomingCalls = () => {
     return new Observable((observer) => {
-      this.socket.on('call_made', (data) => {
+      this.socket.on('BackOffer', (data) => {
         observer.next(data);
       });
     });
   }
 
-  getAllConnectedClients(fn: (participants: Array<string>) => void) {
-    this.listen('all_clients', fn);
+  getAllConnectedClients = () => {
+    return new Observable((observer) => {
+      this.socket.on('AllActiveClients', (data) => {
+        observer.next(data);
+      });
+    });
   }
 
   public listen(channel: string, fn) {
@@ -62,18 +65,38 @@ export class SocketIOService {
   }
 
   sendOfferSignal(data) {
-    this.send('call_user', data);
+    this.send('Offer', data);
   }
 
-  sendAnswerSignal(msg) {
-    this.send('answer_signal', msg);
+  sendAnswerSignal(data) {
+    this.send('Answer', data);
   }
 
-  onAnswer(fn: (msg) => void) {
-    this.listen('answer', fn);
+  getOnAnswer = () => {
+    return new Observable((observer) => {
+      this.socket.on('BackAnswer', (data) => {
+        observer.next(data);
+      });
+    });
   }
 
-  onRoomLeft(fn: (socketId: string) => void) {
-    this.listen('room_left', fn);
+  getOnOffer = () => {
+    return new Observable((observer) => {
+      this.socket.on('BackOffer', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
+  disconnectCall(data){
+    this.socket.emit('Disconnect', data);
+  }
+
+  onDisconnectCall(){
+    return new Observable((observer) => {
+      this.socket.on('OnDisconnect', (data) => {
+        observer.next(data);
+      });
+    });
   }
 }

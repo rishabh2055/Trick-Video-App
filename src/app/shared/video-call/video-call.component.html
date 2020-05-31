@@ -1,0 +1,18 @@
+<div class="col s12 m12 l12 white-text">
+    <div class="video-container">
+        <div class="call-initiating">
+            <div id="callingVideoSection" class="light-blue lighten-5 calling-user-img pulse">TT</div>
+            <div id="peerVideoSection" style="visibility: hidden;">
+              <video autoplay class="remote-video" id="peerVideo" #peerVideo></video>
+            </div>
+            <div class="call-buttons">
+                <button (click)="muteUnmute()" class="btn-floating waves-effect btn-large cyan">
+                    <i *ngIf="mute" class="material-icons" title="Unmute">volume_off</i>
+                    <i *ngIf="!mute" class="material-icons" title="Mute">volume_up</i>
+                </button>
+                <button id="endCall" class="btn-floating btn-large waves-effect waves-light red" title="Call End"><i class="material-icons">call_end</i></button>
+            </div>
+        </div>
+        <video draggable="true" autoplay class="local-video" id="localVideo" #myVideo></video>
+    </div>
+</div>

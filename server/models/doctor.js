@@ -30,6 +30,46 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       field: '"RegistrationNo"'
     },
+    aadharNo : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"AadharNo"'
+    },
+    consultationFee : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"ConsultationFee"'
+    },
+    departmentIds : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"DepartmentId"'
+    },
+    specialization : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"Specialization"'
+    },
+    experience : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"Experience"'
+    },
+    qualification : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"Qualification"'
+    },
+    address : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"Address"'
+    },
+    profileImage : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"ProfileImage"'
+    },
     createdOn: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
@@ -58,3 +98,4 @@ module.exports = (sequelize, DataTypes) => {
   };
   return Doctors;
 };
+

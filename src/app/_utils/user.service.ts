@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 import {User} from '../models';
 
@@ -17,5 +16,9 @@ export class UserService {
 
   getUserDetails(uid){
     return this.http.get<User>(`/api/user/${uid}`);
+  }
+
+  uploadImage(formData){
+    return this.http.post<User>(`/api/user/upload`, formData);
   }
 }

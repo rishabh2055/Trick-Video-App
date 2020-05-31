@@ -209,6 +209,8 @@ class User{
         });
         if(doctorDetails){
           userDetails.doctorProfile = doctorDetails;
+        }else{
+          userDetails.doctorProfile = {};
         }
       }
       return res.status(200).json(userDetails);
@@ -216,6 +218,45 @@ class User{
       console.error(`Error on GET .../me failed: ${error}`);
       return res.status(503).json({
         message: 'Failed to get user details'
+      });
+    }
+  }
+
+  static async uploadImage(req, res){
+    try{
+      if (!req.file) {
+        console.log("Your request doesn’t have any file");
+        return res.send({
+          success: false
+        });
+
+      } else {
+        // Save uploaded image
+        if(req.user.isDoctor){
+          await models.sequelize.transaction(async t => {
+            const updateDoctorImage = await models.doctors.update({
+              profileImage: req.file.filename,
+              updatedOn: now
+            },
+              {
+                returning: true,
+                where: {
+                  userId: req.user.id
+                },
+                attributes: ['id', 'updated'],
+                transaction: t,
+              }
+            );
+            if(updateDoctorImage){
+              return res.status(200).json({success: true, file: req.file.filename});
+            }
+          });
+        }
+      }
+    }catch(error){
+      console.error(`Error on GET .../upload failed: ${error}`);
+      return res.status(503).json({
+        message: 'Failed to upload user image'
       });
     }
   }

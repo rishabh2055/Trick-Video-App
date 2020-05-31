@@ -1,12 +1,17 @@
 .remote-video {
     border: 1px solid #cddfe7;
-    height: 90vh;
+    height: 0;
     -webkit-box-shadow: -2px 6px 9px -3px rgba(0,0,0,0.75);
     -moz-box-shadow: -2px 6px 9px -3px rgba(0,0,0,0.75);
     box-shadow: -2px 6px 9px -3px rgba(0,0,0,0.75);
     margin:3px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
   }
-  
+
   .local-video {
     position: absolute;
     border: 1px solid #cddfe7;
@@ -18,7 +23,7 @@
     border-radius: 5px;
     height: 32%;
   }
-  
+
   .video-container {
     padding: 0 !important;
     position: inherit !important;
@@ -40,7 +45,7 @@
     width: auto !important;
   }
   .call-buttons{
-    margin:0 40%;
+    position: absolute; bottom: 5%; z-index: 1; width: 100%; text-align: center;
   }
   .call-buttons button{
     margin: 0 6px;

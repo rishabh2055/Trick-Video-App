@@ -52,3 +52,13 @@
     class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i
       class="material-icons">menu</i></a>
 </aside>
+
+<ng-container *ngIf="showIncomingCall">
+  <app-incoming-call
+    [calleeDetails]="calleeDetails"
+    [callerDetails]="callerDetails"
+    (answerCall)="handleAnswerCall()"
+    (rejectCall)="handleRejectCall()"
+    >
+  </app-incoming-call>
+</ng-container>

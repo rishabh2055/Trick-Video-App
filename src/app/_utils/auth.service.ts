@@ -22,7 +22,7 @@ export class AuthService {
   }
 
   signout(){
-    localStorage.clear();
+    window.localStorage.clear();
     this.isLoggedIn.next(this.isAuthenticated());
   }
 

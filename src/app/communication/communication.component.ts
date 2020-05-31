@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { SocketIOService } from '../_utils/socketio.service';
@@ -25,11 +25,11 @@ export class CommunicationComponent implements OnInit, AfterViewInit {
     private socketIOService: SocketIOService,
     private userService: UserService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.socketIOService.connect();
     this.loggedInUser = this.authService.getUser();
     this.route.params.subscribe(params => {
       this.userUid = params.uid;
@@ -58,11 +58,21 @@ export class CommunicationComponent implements OnInit, AfterViewInit {
         this.getAllChats();
         this.scrollToBottom();
         this.userDetailsLoaded = true;
+        this.getUsersSocketDetails();
       },
       (error) => {
 
       }
     );
+  }
+
+  getUsersSocketDetails(){
+    const getAllConnectedClients = JSON.parse(localStorage.getItem('connectedClients'));
+    getAllConnectedClients.map(client => {
+      if (client.user.uid === this.userDetails.uid){
+        this.userDetails.socketId = client.socketId;
+      }
+    });
   }
 
   getAllChats(){
@@ -83,7 +93,9 @@ export class CommunicationComponent implements OnInit, AfterViewInit {
       this.socketIOService.sendChat({
         message,
         from: this.loggedInUser.id,
-        to: this.userDetails.id
+        to: this.userDetails.id,
+        sender: this.socketIOService.socketId,
+        reciever: this.userDetails.socketId
       });
       this.chatForm.patchValue({
         chatMessage: ''
@@ -98,7 +110,12 @@ export class CommunicationComponent implements OnInit, AfterViewInit {
   }
 
   startVideoCall(){
-    this.videoCall = true;
+    this.router.navigate(['/video-call', this.userDetails.uid]);
+    // const url = this.router.serializeUrl(
+    //   this.router.createUrlTree(['/video-call', this.userDetails.uid])
+    // );
+
+    // window.open(url, '', `scrollbars=yes,resizable=yes,left=0,width=${window.innerWidth},height=${window.innerHeight}`);
   }
 
 }

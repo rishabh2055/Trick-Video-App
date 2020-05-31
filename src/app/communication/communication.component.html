@@ -2,7 +2,7 @@
   <div class="wrapper">
     <app-sidebar></app-sidebar>
 
-    <section id="content" *ngIf="!videoCall && userDetailsLoaded">
+    <section id="content" *ngIf="userDetailsLoaded">
       <div class="col s12 m12 l12 chat-header white-text">
         <div class="d-flex bd-highlight">
           <div class="light-blue lighten-5 chat-user-img top-user-info">{{userDetails.firstName.toUpperCase().charAt(0)}}{{userDetails.lastName.toUpperCase().charAt(0)}}</div>
@@ -48,10 +48,6 @@
           </div>
         </form>
       </div>
-    </section>
-
-    <section id="content" *ngIf="videoCall">
-        <app-video-call [userDetails]="userDetails"></app-video-call>
     </section>
   </div>
 </div>

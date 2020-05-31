@@ -10,64 +10,68 @@
         <div class="card-content">
           <span class="card-title center-align">Register your account</span>
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-            <div class="row">
-              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.firstName.errors }">
-                <input id="first_name" formControlName="firstName" type="text" class="validate">
-                <label for="first_name">First name</label>
-                <span *ngIf="submitted && f.firstName.errors" class="helper-text">
-                  <span *ngIf="f.firstName.errors.required">First name is required</span>
-                  <span *ngIf="f.firstName.errors.maxlength">First name must be maximum 100 characters</span>
-                  <span *ngIf="f.firstName.errors.minlength">First name must be at least 2 characters</span>
-                </span>
-              </div>
+            <div class="col s12">
+              <div class="row form-row">
+                <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.firstName.errors }">
+                  <input id="first_name" formControlName="firstName" type="text" class="validate">
+                  <label for="first_name">First name</label>
+                  <span *ngIf="submitted && f.firstName.errors" class="helper-text">
+                    <span *ngIf="f.firstName.errors.required">First name is required</span>
+                    <span *ngIf="f.firstName.errors.maxlength">First name must be maximum 100 characters</span>
+                    <span *ngIf="f.firstName.errors.minlength">First name must be at least 2 characters</span>
+                  </span>
+                </div>
 
-              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.lastName.errors }">
-                <input id="last_name" formControlName="lastName" type="text" class="validate">
-                <label for="last_name">Last name</label>
-                <span *ngIf="submitted && f.lastName.errors" class="helper-text">
-                  <span *ngIf="f.lastName.errors.required">Last name is required</span>
-                  <span *ngIf="f.lastName.errors.maxlength">Last name must be maximum 100 characters</span>
-                  <span *ngIf="f.lastName.errors.minlength">Last name must be at least 2 characters</span>
-                </span>
+                <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.lastName.errors }">
+                  <input id="last_name" formControlName="lastName" type="text" class="validate">
+                  <label for="last_name">Last name</label>
+                  <span *ngIf="submitted && f.lastName.errors" class="helper-text">
+                    <span *ngIf="f.lastName.errors.required">Last name is required</span>
+                    <span *ngIf="f.lastName.errors.maxlength">Last name must be maximum 100 characters</span>
+                    <span *ngIf="f.lastName.errors.minlength">Last name must be at least 2 characters</span>
+                  </span>
+                </div>
               </div>
+              <div class="row form-row">
+                <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.email.errors }">
+                  <input id="email" formControlName="email" type="text" class="validate">
+                  <label for="email">Email</label>
+                  <span *ngIf="submitted && f.email.errors" class="helper-text">
+                    <span *ngIf="f.email.errors.required">Email is required</span>
+                    <span *ngIf="f.email.errors.email">Email must be a valid email address</span>
+                    <span *ngIf="f.email.errors.maxlength">Email must be maximum 100 characters</span>
+                    <span *ngIf="f.email.errors.minlength">Email must be at least 2 characters</span>
+                  </span>
+                </div>
 
-              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.email.errors }">
-                <input id="email" formControlName="email" type="text" class="validate">
-                <label for="email">Email</label>
-                <span *ngIf="submitted && f.email.errors" class="helper-text">
-                  <span *ngIf="f.email.errors.required">Email is required</span>
-                  <span *ngIf="f.email.errors.email">Email must be a valid email address</span>
-                  <span *ngIf="f.email.errors.maxlength">Email must be maximum 100 characters</span>
-                  <span *ngIf="f.email.errors.minlength">Email must be at least 2 characters</span>
-                </span>
+                <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.mobileNo.errors }">
+                  <input id="mobile_no" formControlName="mobileNo" type="text" class="validate">
+                  <label for="mobile_no">Mobile no</label>
+                  <span *ngIf="submitted && f.mobileNo.errors" class="helper-text">
+                    <span *ngIf="f.mobileNo.errors.required">Mobile no is required</span>
+                    <span *ngIf="f.mobileNo.errors.pattern">Mobile no must be a valid mobile no</span>
+                  </span>
+                </div>
               </div>
+              <div class="row form-row">
+                <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.password.errors }">
+                  <input id="password" formControlName="password" type="password" class="validate">
+                  <label for="password">Password</label>
+                  <span *ngIf="submitted && f.password.errors" class="helper-text">
+                    <span *ngIf="f.password.errors.required">Password is required</span>
+                    <span *ngIf="f.password.errors.maxlength">Password must be maximum 100 characters</span>
+                    <span *ngIf="f.password.errors.minlength">Password must be at least 6 characters</span>
+                  </span>
+                </div>
 
-              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.mobileNo.errors }">
-                <input id="mobile_no" formControlName="mobileNo" type="text" class="validate">
-                <label for="mobile_no">Mobile no</label>
-                <span *ngIf="submitted && f.mobileNo.errors" class="helper-text">
-                  <span *ngIf="f.mobileNo.errors.required">Mobile no is required</span>
-                  <span *ngIf="f.mobileNo.errors.pattern">Mobile no must be a valid mobile no</span>
-                </span>
-              </div>
-
-              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.password.errors }">
-                <input id="password" formControlName="password" type="password" class="validate">
-                <label for="password">Password</label>
-                <span *ngIf="submitted && f.password.errors" class="helper-text">
-                  <span *ngIf="f.password.errors.required">Password is required</span>
-                  <span *ngIf="f.password.errors.maxlength">Password must be maximum 100 characters</span>
-                  <span *ngIf="f.password.errors.minlength">Password must be at least 6 characters</span>
-                </span>
-              </div>
-
-              <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.confirmPassword.errors }">
-                <input id="confirm_password" formControlName="confirmPassword" type="password" class="validate">
-                <label for="confirm_password">Confirm password</label>
-                <span *ngIf="submitted && f.confirmPassword.errors" class="helper-text">
-                  <span *ngIf="f.confirmPassword.errors.required">Confirm password is required</span>
-                  <span *ngIf="f.confirmPassword.errors.mustMatch">Passwords must match</span>
-                </span>
+                <div class="input-field col m6 s12" [ngClass]="{ 'has-error': submitted && f.confirmPassword.errors }">
+                  <input id="confirm_password" formControlName="confirmPassword" type="password" class="validate">
+                  <label for="confirm_password">Confirm password</label>
+                  <span *ngIf="submitted && f.confirmPassword.errors" class="helper-text">
+                    <span *ngIf="f.confirmPassword.errors.required">Confirm password is required</span>
+                    <span *ngIf="f.confirmPassword.errors.mustMatch">Passwords must match</span>
+                  </span>
+                </div>
               </div>
             </div>
             <div class="row">

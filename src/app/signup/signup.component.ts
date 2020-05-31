@@ -67,6 +67,8 @@ export class SignupComponent implements OnInit {
         this.isSuccess = true;
         response.message = 'Registered successfully. Go to login page.';
         this.serverMessageInfo = response;
+        this.registerForm.reset();
+        this.submitted = false;
       }, (error) => {
         this.showSuccessErrorDetails = true;
         this.isSuccess = false;

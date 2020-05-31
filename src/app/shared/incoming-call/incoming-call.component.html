@@ -1,0 +1,23 @@
+<div id="incomingCallModal" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]"
+  [materializeActions]="modalActions">
+  <div class="modal-content incoming-call-modal">
+    <div class="row" (click)="stopPropagation($event)">
+      <div class="col s12">
+        <div class="call">
+          <div>
+            <div class="light-blue lighten-5 calling-user-img pulse">
+              {{callerDetails.firstName.toUpperCase().charAt(0)}}{{callerDetails.lastName.toUpperCase().charAt(0)}}
+            </div>
+            <h4 class="center-align">{{callerDetails.firstName}} {{callerDetails.lastName}} calling ...</h4>
+            <div class="call-buttons center-align">
+              <button (click)="handleRejectCall()" class="btn-floating btn-large waves-effect waves-light red" title="Reject"><i
+                  class="material-icons">call_end</i></button>
+              <button (click)="handleAnswerCall()" class="btn-floating btn-large waves-effect waves-light green pulse" title="Accept"><i
+                  class="material-icons">call</i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

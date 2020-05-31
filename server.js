@@ -1,4 +1,5 @@
 import http from 'http';
+import https from 'https';
 // Express is for building the Rest apis
 import express from 'express';
 // body-parser helps to parse the request and create the req.body object
@@ -11,6 +12,11 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import socket from 'socket.io';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+const options = {
+  key: fs.readFileSync('./file.pem'),
+  cert: fs.readFileSync('./file.crt')
+};
 
 import db from './server/models';
 import routes from './server/routes';
@@ -74,13 +80,19 @@ app.set('views', path.join(__dirname, '/server/views'));
 app.set('view engine', 'pug');
 
 //set port, listen  for requests
-const PORT = process.env.PORT || 3000;
-const server = http.createServer( app ).listen( PORT, function() {
+const PORT = process.env.PORT || 4000;
+const SECURE_PORT = process.env.PORT || 3000;
+const server = http.createServer( options, app ).listen( PORT, function() {
   console.log(`Server is running on port:: ${PORT}`);
+});
+
+https.createServer( options, app ).listen( SECURE_PORT, function() {
+  console.log(`Secure Server is running on port:: ${SECURE_PORT}`);
 });
 
 // Socket setup
 const io = socket(server);
+io.set("transports", ["xhr-polling","websocket","polling", "htmlfile"]);
 
 // middleware
 io.use((socket, next) => {
@@ -96,19 +108,35 @@ io.use((socket, next) => {
   return next(new Error('authentication error'));
 });
 
+let activeSockets = [];
+let callRoomName;
+
 io.on('connection', (socket) => {
-  console.log('inside connection')
-  const sockets = io.sockets.sockets;
+  const existingSocket = activeSockets.find(
+    existingSocket => existingSocket.user.id === socket.user.id
+  );
+
+  if (!existingSocket) {
+    activeSockets.push(socket);
+  }else{
+    activeSockets.map((existingSocket, index) => {
+      if(existingSocket.user.id === socket.user.id){
+        activeSockets.splice(index, 1);
+        activeSockets.push(socket);
+      }
+    });
+  }
   const returnSockets = [];
-  for(let socketId in sockets){
+  for(let socketId in activeSockets){
     returnSockets.push({
-      user: sockets[socketId].user,
-      socketId: sockets[socketId].id
+      user: activeSockets[socketId].user,
+      socketId: activeSockets[socketId].id
     })
   }
-  io.emit('all_clients', returnSockets);
-  console.log('Made socket connection', socket.id);
-  socket.on('room_join_request', payload => {debugger
+  io.emit('AllActiveClients', returnSockets);
+
+  socket.on('room_join_request', payload => {
+    callRoomName = payload.roomName;
     socket.join(payload.roomName, err => {
         if (!err) {
             io.in(payload.roomName).clients((err, clients) => {
@@ -120,32 +148,36 @@ io.on('connection', (socket) => {
     })
   });
 
-  socket.on("call_user", (data) => {
-    io.in(data.roomName).emit("call_made", {
+  socket.on("Offer", (data) => {
+    io.to(data.callee).emit("BackOffer", {
       offer: data.offer,
       roomName: data.roomName,
       caller: data.caller,
-      callee: data.callee
+      callee: data.callee,
+      callerDetails: socket.user
     });
   });
 
-  socket.on("make_answer", data => {
-    io.to(data.to).emit("answer_made", {
+  socket.on("Answer", data => {
+    io.to(data.caller).emit("BackAnswer", {
       socket: socket.id,
-      answer: data.answer
+      answer: data.answer,
+      caller: data.caller,
+      callee: data.callee,
+      calleeDetails: socket.user
     });
   });
 
-  socket.on('answer_signal', payload => {
-      io.to(payload.callerId).emit('answer', { signalData: payload.signalData, calleeId: socket.id });
+  socket.on('Disconnect', (data) => {
+    activeSockets = activeSockets.filter(
+      existingSocket => existingSocket === data.caller
+    );
+    if(data.callee){
+      io.to(data.callee).emit('OnDisconnect', { type: 'disconnected', socketId: socket.id });
+    }
   });
-
-  socket.on('disconnect', () => {
-      io.emit('room_left', { type: 'disconnected', socketId: socket.id })
-  })
   socket.on('chat-info', (chatData) => {
-    io.emit('chat-data', chatData);
+    io.to(chatData.reciever).emit('chat-data', chatData);
   });
 });
-
 module.exports = app;

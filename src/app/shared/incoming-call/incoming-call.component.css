@@ -1,0 +1,20 @@
+.calling-user-img{
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  font-size: 65px;
+  color: #ff6f00;
+  line-height: 168px;
+  text-align: center;
+  font-family: monospace;
+  margin: 5% 37%;
+}
+.btn-floating i{
+  width: auto !important;
+}
+.call-buttons button{
+  margin:0 4%;
+}
+.incoming-call-modal{
+  background-color: rgb(94, 53, 177, 0.1);
+}
