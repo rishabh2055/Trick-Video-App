@@ -29,7 +29,6 @@
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
-              "./node_modules/jquery/dist/jquery-ui.min.js",
               "./node_modules/hammerjs/hammer.js",
               "./node_modules/materialize-css/dist/js/materialize.js"
             ]

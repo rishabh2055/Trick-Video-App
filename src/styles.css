@@ -190,6 +190,7 @@ a {
 }
 #main {
   padding-left: 240px;
+  background-color: #d3d3d3;
 }
 .wrapper{
   height: 100%;
@@ -273,6 +274,45 @@ a {
 }
 .autocomplete-content{
   margin-top: 0 !important;
+}
+.row .col.page-title-div {
+  padding: 0px 1.5rem;
+}
+.page-title-div>h1.header {
+  margin: 0px;
+  padding: 25px 0 0 0px;
+}
+.page-title-div h1.header~.breadcrumbs {
+  margin-bottom: 5px;
+}
+
+.breadcrumbs {
+  padding: 0;
+  margin: 15px 0;
+  list-style: none;
+}
+.breadcrumbs>li {
+  display: inline-block;
+}
+.breadcrumbs>li>a {
+  color: #000;
+}
+.breadcrumbs>li.active, .breadcrumbs>li.active>a {
+  font-weight: normal;
+  color: #6f6f6f;
+}
+.breadcrumbs>li+li:before {
+  padding: 0 5px;
+  color: #6f6f6f;
+  content: "/\00a0";
+}
+section.section {
+  padding-top: 0;
+}
+
+h1.header {
+  font-size: 1.75rem !important;
+  font-weight: 400 !important;
 }
 
 @media only screen and (max-width: 600px) and (min-width: 300px){

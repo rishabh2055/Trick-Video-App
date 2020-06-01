@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       field: '"ConsultationFee"'
     },
-    departmentIds : {
+    departments : {
       type: DataTypes.TEXT,
       allowNull: true,
-      field: '"DepartmentId"'
+      field: '"Departments"'
     },
     specialization : {
       type: DataTypes.TEXT,
@@ -60,10 +60,25 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       field: '"Qualification"'
     },
+    state : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"State"'
+    },
+    city : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"City"'
+    },
     address : {
       type: DataTypes.TEXT,
       allowNull: true,
       field: '"Address"'
+    },
+    aboutYourself : {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: '"AboutYourself"'
     },
     profileImage : {
       type: DataTypes.TEXT,

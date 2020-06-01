@@ -63,12 +63,12 @@ export class SignupComponent implements OnInit {
     }
     this.userService.registerNewUser(this.registerForm.value).subscribe(
       (response: any) => {
+        this.registerForm.reset();
+        this.submitted = false;
         this.showSuccessErrorDetails = true;
         this.isSuccess = true;
         response.message = 'Registered successfully. Go to login page.';
         this.serverMessageInfo = response;
-        this.registerForm.reset();
-        this.submitted = false;
       }, (error) => {
         this.showSuccessErrorDetails = true;
         this.isSuccess = false;

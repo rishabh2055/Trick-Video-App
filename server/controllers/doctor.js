@@ -84,7 +84,6 @@ class Doctor {
 
   static async updateDoctorProfile(req, res) {
     try {
-      debugger
       if (!req.body) {
         console.error('POST .../doctor failed: no body provided');
         return res.status(400).send({
@@ -96,11 +95,14 @@ class Doctor {
           clinicName: req.body.clinicName,
           aadharNo: req.body.aadharNo,
           consultationFee: req.body.consultationFee,
-          departmentIds: JSON.stringify(req.body.department),
+          departments: JSON.stringify(req.body.department),
           specialization: req.body.specialization,
           experience: req.body.experience,
           qualification: req.body.qualification,
+          state: req.body.state,
+          city: req.body.city,
           address: req.body.address,
+          aboutYourself: req.body.aboutYourself,
           updatedOn: now
         },
           {
