@@ -25,6 +25,7 @@ export class SidebarComponent implements OnInit {
   callerDetails: any = {};
   callDetails: any = {};
   showIncomingCall = false;
+  showSidebar = false;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -34,8 +35,20 @@ export class SidebarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.checkIncomingCalls();
-    this.loggedInUserDetails = this.authService.getUser();
+    this.socketService.connect();
+    this.socketService.listen('connect', () => {
+      console.log(`My socket id is : ${this.socketService.socketId}`);
+      this.onCloseCall();
+    });
+    this.joinRoom();
+    this.authService.getUser().subscribe(
+      (response) => {
+        this.loggedInUserDetails = response;
+        this.showSidebar = true;
+        this.checkIncomingCalls();
+      },
+      (error) => {}
+    );
     this.getAllUsers();
     this.route.params.subscribe(params => {
       this.userUid = params.uid;
@@ -73,13 +86,23 @@ export class SidebarComponent implements OnInit {
     this.socketService.disconnectCall({caller: this.socketService.socketId});
   }
 
-  checkIncomingCalls() {
-    this.socketService.connect();
-    this.socketService.listen('connect', () => {
-      console.log(`My socket id is : ${this.socketService.socketId}`);
-      this.onCloseCall();
-    });
+  joinRoom(){
+    this.socketService.responseForJoiningRoom().subscribe(
+      (roomDetail: any) => {
+        this.socketService.requestForJoiningRoom(
+          {
+            roomName: roomDetail.roomName,
+            from: roomDetail.from,
+            to: roomDetail.to,
+            sender: roomDetail.sender,
+            reciever: roomDetail.reciever
+          }
+        );
+      }
+    );
+  }
 
+  checkIncomingCalls() {
     this.socketService.getAllConnectedClients().subscribe(
       (clients) => {
         localStorage.removeItem('connectedClients');
@@ -92,7 +115,7 @@ export class SidebarComponent implements OnInit {
         this.callDetails = callData;
         const getAllConnectedClients = JSON.parse(localStorage.getItem('connectedClients'));
         getAllConnectedClients.map(client => {
-          if (client.socketId === callData.callee && this.authService.getUser().uid === client.user.uid) {
+          if (client.socketId === callData.callee && this.loggedInUserDetails.uid === client.user.uid) {
             this.showIncomingCall = true;
             this.calleeDetails = client;
             this.callerDetails = callData.callerDetails;

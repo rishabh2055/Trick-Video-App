@@ -21,12 +21,12 @@ export class SocketIOService {
   }
 
   public sendChat(chatInfo) {
-    this.socket.emit('chat-info', chatInfo);
+    this.socket.emit('SendMessage', chatInfo);
   }
 
   public getChats = () => {
     return new Observable((observer) => {
-      this.socket.on('chat-data', (chatData) => {
+      this.socket.on('GetMessages', (chatData) => {
         observer.next(chatData);
       });
     });
@@ -56,12 +56,20 @@ export class SocketIOService {
     this.socket.emit(chanel, message);
   }
 
+  responseForJoiningRoom = () => {
+    return new Observable((observer) => {
+      this.socket.on('RoomJoinResponse', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
   requestForJoiningRoom(msg) {
-    this.send('room_join_request', msg);
+    this.send('RoomJoinRequest', msg);
   }
 
   onRoomParticipants(fn: (participants: Array<string>) => void) {
-    this.listen('room_users', fn);
+    this.listen('RoomUsers', fn);
   }
 
   sendOfferSignal(data) {

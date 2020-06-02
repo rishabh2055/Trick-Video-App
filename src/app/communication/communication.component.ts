@@ -1,7 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { SocketIOService } from '../_utils/socketio.service';
 import { UserService } from '../_utils/user.service';
 import { AuthService } from '../_utils/auth.service';
@@ -11,43 +10,54 @@ import { AuthService } from '../_utils/auth.service';
   templateUrl: './communication.component.html',
   styleUrls: ['./communication.component.css']
 })
-export class CommunicationComponent implements OnInit, AfterViewInit {
-  @ViewChild(PerfectScrollbarComponent) scrollbar?: PerfectScrollbarComponent;
+export class CommunicationComponent implements OnInit, AfterContentChecked {
   chatForm: FormGroup;
-  chatList: string[] = [];
+  chatList: Array<any> = [];
   userUid;
   userDetails: any = {};
   loggedInUser: any = {};
   videoCall = false;
   userDetailsLoaded = false;
+  public roomName: number;
+  public showFromUserImage = false;
+  public showToUserImage = false;
+  public fromUseImage = '';
+  public toUseImage = '';
   constructor(
     private formBuilder: FormBuilder,
     private socketIOService: SocketIOService,
     private userService: UserService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
-
-  ngOnInit() {
-    this.loggedInUser = this.authService.getUser();
-    this.route.params.subscribe(params => {
-      this.userUid = params.uid;
-      this.getUserDetails();
-    });
+    private router: Router,
+    private cdref: ChangeDetectorRef
+  ) {
     this.chatForm = this.formBuilder.group({
       chatMessage: ['']
     });
   }
 
-  ngAfterViewInit() {
-    this.scrollToBottom();
+  ngOnInit() {
+    this.authService.getUser().subscribe(
+      (response) => {
+        this.loggedInUser = response;
+        if (this.loggedInUser.isDoctor && this.loggedInUser.doctorProfile.profileImage !== null){
+          this.showFromUserImage = true;
+          this.fromUseImage = `assets/uploads/${this.loggedInUser.doctorProfile.profileImage}`;
+        }else{
+          this.showFromUserImage = false;
+        }
+        this.route.params.subscribe(params => {
+          this.userUid = params.uid;
+          this.getUserDetails();
+        });
+      },
+      (error) => {}
+    );
   }
 
-  scrollToBottom(): void {
-    try {
-      this.scrollbar.directiveRef.scrollToBottom(0, 10);
-    } catch (err) { }
+  ngAfterContentChecked(){
+    this.cdref.detectChanges();
   }
 
   getUserDetails(){
@@ -55,8 +65,13 @@ export class CommunicationComponent implements OnInit, AfterViewInit {
     this.userService.getUserDetails(this.userUid).subscribe(
       (response) => {
         this.userDetails = response;
+        if(this.userDetails.isDoctor && this.userDetails.doctorProfile.profileImage !== null){
+          this.showToUserImage = true;
+          this.toUseImage = `assets/uploads/${this.userDetails.doctorProfile.profileImage}`;
+        }else{
+          this.showToUserImage = false;
+        }
         this.getAllChats();
-        this.scrollToBottom();
         this.userDetailsLoaded = true;
         this.getUsersSocketDetails();
       },
@@ -73,30 +88,70 @@ export class CommunicationComponent implements OnInit, AfterViewInit {
         this.userDetails.socketId = client.socketId;
       }
     });
+    this.getAllCommunications();
+  }
+
+  getAllCommunications(){
+    const getParams = {
+      from: +this.loggedInUser.id,
+      to: +this.userDetails.id
+    };
+    this.userService.getAllCommunications(getParams).subscribe(
+      (response: any) => {
+        this.chatList = response;
+        if (this.chatList.length === 0){
+          this.roomName = Math.ceil(Math.random() * 100000000);
+        }else{
+          this.roomName = this.chatList[0].roomName;
+        }
+        this.socketIOService.requestForJoiningRoom(
+          {
+            roomName: this.roomName,
+            from: this.loggedInUser.id,
+            to: this.userDetails.id,
+            sender: this.socketIOService.socketId,
+            reciever: this.userDetails.socketId
+          }
+        );
+      },
+      (error) => {
+
+      }
+    );
   }
 
   getAllChats(){
     this.socketIOService.getChats().subscribe(
       (chatData: any) => {
         this.chatList.push(chatData);
-        console.log(this.chatList);
     });
   }
 
-  sendMessage() {
+  sendMessage(e) {
     let message: string;
     const messageInfo = this.chatForm.value.chatMessage.split('\n');
     if(messageInfo.length > 0){
       message = messageInfo[0];
     }
     if (message !== ''){
-      this.socketIOService.sendChat({
+      const messageData = {
         message,
-        from: this.loggedInUser.id,
-        to: this.userDetails.id,
+        fromUserId: this.loggedInUser.id,
+        toUserId: this.userDetails.id,
         sender: this.socketIOService.socketId,
-        reciever: this.userDetails.socketId
-      });
+        reciever: this.userDetails.socketId,
+        roomName: this.roomName
+      }
+      this.socketIOService.sendChat(messageData);
+      this.resizeTextArea(e);
+      this.userService.saveCommunication(messageData).subscribe(
+        (response) => {
+
+        },
+        (error) => {
+
+        }
+      );
       this.chatForm.patchValue({
         chatMessage: ''
       });
@@ -104,9 +159,13 @@ export class CommunicationComponent implements OnInit, AfterViewInit {
   }
 
   resizeTextArea(e){
-    e.target.style.height = 'auto';
-    e.target.style.height = e.target.scrollHeight + 'px';
-    e.target.style.maxHeight = '100px';
+    if(e.keyCode === 13){
+      e.target.style.height = 'auto';
+    }else{
+      e.target.style.height = 'auto';
+      e.target.style.height = e.target.scrollHeight + 'px';
+      e.target.style.maxHeight = '100px';
+    }
   }
 
   startVideoCall(){

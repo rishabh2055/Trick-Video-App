@@ -37,19 +37,23 @@ export class DashboardComponent implements OnInit {
   ){}
 
   ngOnInit(): void{
-    const getLoggedINUser = this.authService.getUser();
+    this.authService.getUser().subscribe(
+      (resp) => {
+        const getLoggedINUser = resp;
+        this.userService.getUserDetails(getLoggedINUser.uid).subscribe(
+          (response) => {
+            this.userDetails = response;
+          },
+          (error) => {
 
-    this.userService.getUserDetails(getLoggedINUser.uid).subscribe(
-      (response) => {
-        this.userDetails = response;
+          }
+        );
+        if(getLoggedINUser.isDoctor){
+          this.getAllAppointments();
+        }
       },
-      (error) => {
-
-      }
+      (error) => {}
     );
-    if(getLoggedINUser.isDoctor){
-      this.getAllAppointments();
-    }
   }
 
   toggleVisible() {

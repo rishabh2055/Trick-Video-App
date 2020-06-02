@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
   public stateInstance;
   public departmentInstance;
   public selectedDepartments: Array<any> = [{tag: ''}];
+  public loggedInUserDetails: any = {};
   constructor(
     private formBuilder: FormBuilder,
     private doctorService: DoctorService,
@@ -153,50 +154,55 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserDetails() {
-    const getLoggedINUser = this.authService.getUser();
+    this.authService.getUser().subscribe(
+      (resp) => {
+        this.loggedInUserDetails = resp;
+        this.userService.getUserDetails(this.loggedInUserDetails.uid).subscribe(
+          (response: any) => {
+            this.userDetails = response;
+            if (this.userDetails.doctorProfile && this.userDetails.doctorProfile.id) {
+              if (this.userDetails.doctorProfile.profileImage === null) {
+                this.userImageSRC = `assets/uploads/no-image.jpg`;
+              } else {
+                this.userImageSRC = `assets/uploads/${this.userDetails.doctorProfile.profileImage}`;
+              }
+              this.profileForm.patchValue({
+                firstName: this.userDetails.firstName,
+                lastName: this.userDetails.lastName,
+                clinicName: this.userDetails.doctorProfile.clinicName,
+                regNo: (this.userDetails.doctorProfile.registrationNo === null) ? '' : this.userDetails.doctorProfile.registrationNo,
+                aadharNo: (this.userDetails.doctorProfile.aadharNo === null) ? '' : this.userDetails.doctorProfile.aadharNo,
+                consultationFee: (this.userDetails.doctorProfile.consultationFee === null) ? '' :
+                  this.userDetails.doctorProfile.consultationFee,
+                specialization: (this.userDetails.doctorProfile.specialization === null)
+                ? '' : this.userDetails.doctorProfile.specialization,
+                experience: (this.userDetails.doctorProfile.experience === null) ? '' : this.userDetails.doctorProfile.experience,
+                qualification: (this.userDetails.doctorProfile.qualification === null) ? '' : this.userDetails.doctorProfile.qualification,
+                address: (this.userDetails.doctorProfile.address === null) ? '' : this.userDetails.doctorProfile.address,
+                aboutYourself: (this.userDetails.doctorProfile.aboutYourself === null) ? '' : this.userDetails.doctorProfile.aboutYourself,
+                state: (this.userDetails.doctorProfile.state === null) ? '' : this.userDetails.doctorProfile.state,
+                city: (this.userDetails.doctorProfile.city === null) ? '' : this.userDetails.doctorProfile.city,
+                mobileNo: this.userDetails.mobileNo,
+                email: this.userDetails.email,
+                department: (this.userDetails.doctorProfile.departments === null) ? '' :
+                  JSON.parse(this.userDetails.doctorProfile.departments)
+              });
+              if (Array.isArray(this.f.department.value)){
+                this.selectedDepartments = [];
+                this.f.department.value.map(dept => {
+                  this.selectedDepartments.push({tag: dept });
+                });
+                this.departmentInstance.data = this.selectedDepartments;
+                this.chipsActions.emit({action: 'material_chip', params: [this.departmentInstance]});
+              }
+            }
+          },
+          (error) => {
 
-    this.userService.getUserDetails(getLoggedINUser.uid).subscribe(
-      (response: any) => {
-        this.userDetails = response;
-        if (this.userDetails.doctorProfile && this.userDetails.doctorProfile.id) {
-          if (this.userDetails.doctorProfile.profileImage === null) {
-            this.userImageSRC = `assets/uploads/no-image.jpg`;
-          } else {
-            this.userImageSRC = `assets/uploads/${this.userDetails.doctorProfile.profileImage}`;
           }
-          this.profileForm.patchValue({
-            firstName: this.userDetails.firstName,
-            lastName: this.userDetails.lastName,
-            clinicName: this.userDetails.doctorProfile.clinicName,
-            regNo: (this.userDetails.doctorProfile.registrationNo === null) ? '' : this.userDetails.doctorProfile.registrationNo,
-            aadharNo: (this.userDetails.doctorProfile.aadharNo === null) ? '' : this.userDetails.doctorProfile.aadharNo,
-            consultationFee: (this.userDetails.doctorProfile.consultationFee === null) ? '' :
-              this.userDetails.doctorProfile.consultationFee,
-            specialization: (this.userDetails.doctorProfile.specialization === null) ? '' : this.userDetails.doctorProfile.specialization,
-            experience: (this.userDetails.doctorProfile.experience === null) ? '' : this.userDetails.doctorProfile.experience,
-            qualification: (this.userDetails.doctorProfile.qualification === null) ? '' : this.userDetails.doctorProfile.qualification,
-            address: (this.userDetails.doctorProfile.address === null) ? '' : this.userDetails.doctorProfile.address,
-            aboutYourself: (this.userDetails.doctorProfile.aboutYourself === null) ? '' : this.userDetails.doctorProfile.aboutYourself,
-            state: (this.userDetails.doctorProfile.state === null) ? '' : this.userDetails.doctorProfile.state,
-            city: (this.userDetails.doctorProfile.city === null) ? '' : this.userDetails.doctorProfile.city,
-            mobileNo: this.userDetails.mobileNo,
-            email: this.userDetails.email,
-            department: (this.userDetails.doctorProfile.departments === null) ? '' :
-              JSON.parse(this.userDetails.doctorProfile.departments)
-          });
-          if (Array.isArray(this.f.department.value)){
-            this.selectedDepartments = [];
-            this.f.department.value.map(dept => {
-              this.selectedDepartments.push({tag: dept });
-            });
-            this.departmentInstance.data = this.selectedDepartments;
-            this.chipsActions.emit({action: 'material_chip', params: [this.departmentInstance]});
-          }
-        }
+        );
       },
-      (error) => {
-
-      }
+      (error) => {}
     );
   }
 
@@ -249,7 +255,7 @@ export class ProfileComponent implements OnInit {
     if (this.profileForm.invalid && this.selectedDepartments.length === 0) {
       return;
     }
-    this.doctorService.updateDoctorProfile(this.profileForm.value, this.authService.getUser().uid).subscribe(
+    this.doctorService.updateDoctorProfile(this.profileForm.value, this.loggedInUserDetails.uid).subscribe(
       (response: any) => {
         this.getUserDetails();
         this.showSuccessErrorDetails = true;

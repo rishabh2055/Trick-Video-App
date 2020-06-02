@@ -1,7 +1,7 @@
 <aside id="left-sidebar-nav">
   <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y">
     <li class="user-details cyan darken-2">
-      <div class="row">
+      <div class="row" *ngIf="showSidebar">
         <div class="col s4 m4 l4">
           <div class="light-blue lighten-5 profile-image">{{loggedInUserDetails.firstName.toUpperCase().charAt(0)}}{{loggedInUserDetails.lastName.toUpperCase().charAt(0)}}</div>
         </div>

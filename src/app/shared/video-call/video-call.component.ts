@@ -54,6 +54,7 @@ export class VideoCallComponent implements OnInit, OnDestroy {
         if (this.currentUserCalling){
           this.roomName = Math.ceil(Math.random() * 100000000);
         }
+
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
           .then(stream => {
             this.myVideo.nativeElement.srcObject = stream;

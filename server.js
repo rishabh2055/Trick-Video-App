@@ -82,11 +82,12 @@ app.set('view engine', 'pug');
 //set port, listen  for requests
 const PORT = process.env.PORT || 4000;
 const SECURE_PORT = process.env.PORT || 3000;
-const server = http.createServer( options, app ).listen( PORT, function() {
+const LANAccess = "0.0.0.0";
+const server = http.createServer( options, app ).listen( PORT, LANAccess, function() {
   console.log(`Server is running on port:: ${PORT}`);
 });
 
-https.createServer( options, app ).listen( SECURE_PORT, function() {
+https.createServer( options, app ).listen( SECURE_PORT, LANAccess, function() {
   console.log(`Secure Server is running on port:: ${SECURE_PORT}`);
 });
 
@@ -109,7 +110,6 @@ io.use((socket, next) => {
 });
 
 let activeSockets = [];
-let callRoomName;
 
 io.on('connection', (socket) => {
   const existingSocket = activeSockets.find(
@@ -135,15 +135,30 @@ io.on('connection', (socket) => {
   }
   io.emit('AllActiveClients', returnSockets);
 
-  socket.on('room_join_request', payload => {
-    callRoomName = payload.roomName;
+  socket.on('RoomJoinRequest', payload => {
     socket.join(payload.roomName, err => {
         if (!err) {
-            io.in(payload.roomName).clients((err, clients) => {
-                if (!err) {
-                    io.in(payload.roomName).emit('room_users', clients)
+          io.in(payload.roomName).clients((err, clients) => {
+            if(!err){
+              if(payload.reciever){
+                const checkAlreadyJoined = clients.find(client => client === payload.reciever);
+                if(!checkAlreadyJoined){
+                  io.to(payload.reciever).emit("RoomJoinResponse", {
+                    roomName: payload.roomName,
+                    from: payload.toUserId,
+                    to: payload.fromUserId,
+                    sender: payload.reciever,
+                    reciever: payload.sender
+                  });
                 }
-            });
+              }
+            }
+          });
+            // io.in(payload.roomName).clients((err, clients) => {
+            //     if (!err) {
+            //         io.in(payload.roomName).emit('RoomUsers', clients)
+            //     }
+            // });
         }
     })
   });
@@ -176,8 +191,8 @@ io.on('connection', (socket) => {
       io.to(data.callee).emit('OnDisconnect', { type: 'disconnected', socketId: socket.id });
     }
   });
-  socket.on('chat-info', (chatData) => {
-    io.to(chatData.reciever).emit('chat-data', chatData);
+  socket.on('SendMessage', (chatData) => {
+    io.in(chatData.roomName).emit('GetMessages', chatData);
   });
 });
 module.exports = app;

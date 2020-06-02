@@ -21,4 +21,12 @@ export class UserService {
   uploadImage(formData){
     return this.http.post<User>(`/api/user/upload`, formData);
   }
+
+  getAllCommunications(params){
+    return this.http.get(`/api/user/communication?from=${params.from}&to=${params.to}`);
+  }
+
+  saveCommunication(postData){
+    return this.http.post(`/api/user/communication`, postData);
+  }
 }

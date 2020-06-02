@@ -8,7 +8,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start": "nodemon --exec babel-node --inspect-brk server.js",
-    "dev": "ng serve --proxy-config proxy.config.json"
+    "dev": "ng serve --ssl true --host 192.168.1.15 --disable-host-check --proxy-config proxy.config.json"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +51,7 @@
     "ngx-perfect-scrollbar": "^9.0.0",
     "ngx-textarea-autosize": "^2.0.3",
     "path": "^0.12.7",
+    "peer": "^0.5.3",
     "pg": "^8.0.3",
     "pg-hstore": "^2.3.3",
     "process": "^0.11.10",

@@ -58,6 +58,7 @@ export class AuthService {
   }
 
   getUser(){
-    return JSON.parse(localStorage.getItem(USER_KEY));
+    const userDetails = JSON.parse(localStorage.getItem(USER_KEY));
+    return this.http.get<User>(`/api/user/${userDetails.uid}`);
   }
 }
