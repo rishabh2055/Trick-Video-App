@@ -67,6 +67,22 @@
                           characters</span>
                       </span>
                     </div>
+                    <div class="col m6 s12">
+                      <div class="center-align radio-field" [ngClass]="{ 'has-error': submitted && f.gender.errors }">
+                        <p class="center-align">Gender</p>
+                        <label>
+                          <input class="with-gap" name="gender" type="radio" value="Male" formControlName="gender" />
+                          <span>Male</span>
+                        </label>
+                        <label>
+                          <input class="with-gap" name="gender" type="radio" value="Female" formControlName="gender" />
+                          <span>Female</span>
+                        </label>
+                        <span *ngIf="submitted && f.gender.errors" class="helper-text">
+                          <span *ngIf="f.gender.errors.required">Choose an option</span>
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div class="row form-row">
                     <div class="input-field col m6 s12">

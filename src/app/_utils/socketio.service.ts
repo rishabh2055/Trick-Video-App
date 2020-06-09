@@ -17,7 +17,7 @@ export class SocketIOService {
   }
 
   public connect() {
-    this.socket = io(`http://localhost:4000?token=${this.authService.getToken()}`);
+    this.socket = io(`http://localhost:3000?token=${this.authService.getToken()}`);
   }
 
   public sendChat(chatInfo) {

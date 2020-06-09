@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   showCalendar = false;
   calendarEvents: EventInput[] = [];
   appointmentDetails = {};
+  geolocationPosition = {};
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -37,6 +38,7 @@ export class DashboardComponent implements OnInit {
   ){}
 
   ngOnInit(): void{
+    this.getLocation();
     this.authService.getUser().subscribe(
       (resp) => {
         const getLoggedINUser = resp;
@@ -53,6 +55,19 @@ export class DashboardComponent implements OnInit {
         }
       },
       (error) => {}
+    );
+  }
+
+  getLocation() {
+    this.userService.getCurrentLocation().subscribe(
+      (response) => {
+        this.geolocationPosition = response;
+      },
+      (error) => {
+        this.showSuccessErrorDetails = true;
+        this.isSuccess = false;
+        this.serverMessageInfo = error;
+      }
     );
   }
 
@@ -125,7 +140,7 @@ export class DashboardComponent implements OnInit {
             }
           });
         }
-        if(apptDetails !== null){
+        if (apptDetails !== null){
           this.calendarEvents.push({
             title: apptDetails.title,
             description: apptDetails.description,
@@ -148,7 +163,7 @@ export class DashboardComponent implements OnInit {
       fromTime: startDateObj.format('HH:mm'),
       toDate: endDateObj.format('YYYY-MM-DD'),
       toTime: endDateObj.format('HH:mm'),
-    }
+    };
     this.appointment.openModal(this.appointmentDetails);
   }
 

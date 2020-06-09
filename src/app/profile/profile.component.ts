@@ -86,7 +86,8 @@ export class ProfileComponent implements OnInit {
       experience: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(500)]],
       qualification: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(500)]],
       address: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(500)]],
-      aboutYourself: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(1000)]]
+      aboutYourself: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(1000)]],
+      gender: ['', Validators.required]
     });
     this.getAllDoctorsDepartment();
   }
@@ -160,41 +161,40 @@ export class ProfileComponent implements OnInit {
         this.userService.getUserDetails(this.loggedInUserDetails.uid).subscribe(
           (response: any) => {
             this.userDetails = response;
-            if (this.userDetails.doctorProfile && this.userDetails.doctorProfile.id) {
-              if (this.userDetails.doctorProfile.profileImage === null) {
-                this.userImageSRC = `assets/uploads/no-image.jpg`;
-              } else {
-                this.userImageSRC = `assets/uploads/${this.userDetails.doctorProfile.profileImage}`;
-              }
-              this.profileForm.patchValue({
-                firstName: this.userDetails.firstName,
-                lastName: this.userDetails.lastName,
-                clinicName: this.userDetails.doctorProfile.clinicName,
-                regNo: (this.userDetails.doctorProfile.registrationNo === null) ? '' : this.userDetails.doctorProfile.registrationNo,
-                aadharNo: (this.userDetails.doctorProfile.aadharNo === null) ? '' : this.userDetails.doctorProfile.aadharNo,
-                consultationFee: (this.userDetails.doctorProfile.consultationFee === null) ? '' :
-                  this.userDetails.doctorProfile.consultationFee,
-                specialization: (this.userDetails.doctorProfile.specialization === null)
-                ? '' : this.userDetails.doctorProfile.specialization,
-                experience: (this.userDetails.doctorProfile.experience === null) ? '' : this.userDetails.doctorProfile.experience,
-                qualification: (this.userDetails.doctorProfile.qualification === null) ? '' : this.userDetails.doctorProfile.qualification,
-                address: (this.userDetails.doctorProfile.address === null) ? '' : this.userDetails.doctorProfile.address,
-                aboutYourself: (this.userDetails.doctorProfile.aboutYourself === null) ? '' : this.userDetails.doctorProfile.aboutYourself,
-                state: (this.userDetails.doctorProfile.state === null) ? '' : this.userDetails.doctorProfile.state,
-                city: (this.userDetails.doctorProfile.city === null) ? '' : this.userDetails.doctorProfile.city,
-                mobileNo: this.userDetails.mobileNo,
-                email: this.userDetails.email,
-                department: (this.userDetails.doctorProfile.departments === null) ? '' :
-                  JSON.parse(this.userDetails.doctorProfile.departments)
+            if (!this.userDetails.doctorProfile || this.userDetails.doctorProfile.profileImage === null) {
+              this.userImageSRC = `assets/uploads/no-image.jpg`;
+            } else {
+              this.userImageSRC = `assets/uploads/${this.userDetails.doctorProfile.profileImage}`;
+            }
+            this.profileForm.patchValue({
+              firstName: this.userDetails.firstName,
+              lastName: this.userDetails.lastName,
+              clinicName: this.userDetails.doctorProfile.clinicName,
+              regNo: (this.userDetails.doctorProfile.registrationNo === null) ? '' : this.userDetails.doctorProfile.registrationNo,
+              aadharNo: (this.userDetails.doctorProfile.aadharNo === null) ? '' : this.userDetails.doctorProfile.aadharNo,
+              consultationFee: (this.userDetails.doctorProfile.consultationFee === null) ? '' :
+                this.userDetails.doctorProfile.consultationFee,
+              specialization: (this.userDetails.doctorProfile.specialization === null)
+              ? '' : this.userDetails.doctorProfile.specialization,
+              experience: (this.userDetails.doctorProfile.experience === null) ? '' : this.userDetails.doctorProfile.experience,
+              qualification: (this.userDetails.doctorProfile.qualification === null) ? '' : this.userDetails.doctorProfile.qualification,
+              address: (this.userDetails.doctorProfile.address === null) ? '' : this.userDetails.doctorProfile.address,
+              aboutYourself: (this.userDetails.doctorProfile.aboutYourself === null) ? '' : this.userDetails.doctorProfile.aboutYourself,
+              state: (this.userDetails.doctorProfile.state === null) ? '' : this.userDetails.doctorProfile.state,
+              city: (this.userDetails.doctorProfile.city === null) ? '' : this.userDetails.doctorProfile.city,
+              mobileNo: this.userDetails.mobileNo,
+              email: this.userDetails.email,
+              gender: this.userDetails.gender,
+              department: (this.userDetails.doctorProfile.departments === null) ? '' :
+                JSON.parse(this.userDetails.doctorProfile.departments)
+            });
+            if (Array.isArray(this.f.department.value)){
+              this.selectedDepartments = [];
+              this.f.department.value.map(dept => {
+                this.selectedDepartments.push({tag: dept });
               });
-              if (Array.isArray(this.f.department.value)){
-                this.selectedDepartments = [];
-                this.f.department.value.map(dept => {
-                  this.selectedDepartments.push({tag: dept });
-                });
-                this.departmentInstance.data = this.selectedDepartments;
-                this.chipsActions.emit({action: 'material_chip', params: [this.departmentInstance]});
-              }
+              this.departmentInstance.data = this.selectedDepartments;
+              this.chipsActions.emit({action: 'material_chip', params: [this.departmentInstance]});
             }
           },
           (error) => {

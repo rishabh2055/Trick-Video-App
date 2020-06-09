@@ -29,6 +29,7 @@ export class SignupComponent implements OnInit {
       mobileNo: ['', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
+      gender: ['', Validators.required],
       isDoctor: ['', Validators.required],
       clinicName: [''],
       registrationNo: [''],

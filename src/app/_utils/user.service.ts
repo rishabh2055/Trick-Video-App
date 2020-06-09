@@ -29,4 +29,8 @@ export class UserService {
   saveCommunication(postData){
     return this.http.post(`/api/user/communication`, postData);
   }
+
+  getCurrentLocation(){
+    return this.http.get(`api/user/currentLocation`);
+  }
 }
